@@ -15,6 +15,7 @@ docker build \
     -f builder.Dockerfile .
 
 if [[ ${CI_SERVER:-} == "yes" ]]; then
+    echo "${DOCKER_CREDS}" | docker login --username mosstech --password-stdin
     docker push "${PYTHON_BUILDER_IMAGE}"
 fi
 

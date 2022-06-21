@@ -1,14 +1,14 @@
 # ---------------------- Templates ---------------------- #
 
 .build:
-  image: mosstech/ci-tools:latest
+  image: mosstech/gcloud-and-docker:390.0.0
   services:
   - docker:dind
   before_script:
   - sleep 5  # allow time for docker startup
 
 .test:
-  image: mosstech/ci-tools:latest
+  image: mosstech/gcloud-and-docker:390.0.0
   services:
   - docker:dind
   before_script:

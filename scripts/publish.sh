@@ -7,6 +7,8 @@ pushd "$(dirname "${BASH_SOURCE[0]}")/../" >/dev/null || exit
 # shellcheck disable=SC1091
 . ./scripts/vars.sh
 
+echo "${DOCKER_CREDS}" | docker login --username mosstech --password-stdin
+
 if [[ ${CI_SERVER:-} == "yes" ]]; then
     docker pull "${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}"
     docker pull "${PYTHON_DISTROLESS_IMAGE}-debug-intermediate-${CI_PIPELINE_ID}"
