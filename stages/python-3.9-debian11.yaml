@@ -1,0 +1,24 @@
+build-builder-python-3.9-debian11:
+  extends:
+  - .build-builder
+  - .python-3.9-debian11
+
+build-distroless-python-3.9-debian11:
+  extends:
+  - .build-distroless
+  - .python-3.9-debian11
+
+publish-python-3.9-debian11:
+  extends:
+  - .publish
+  - .python-3.9-debian11
+
+test-version-python-3.9-debian11:
+  extends:
+  - .test-version
+  - .python-3.9-debian11
+
+test-version-debug-python-3.9-debian11:
+  extends:
+  - .test-version-debug
+  - .python-3.9-debian11

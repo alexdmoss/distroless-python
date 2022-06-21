@@ -1,0 +1,59 @@
+# ---------------------- Templates ---------------------- #
+
+.build:
+  image: mosstech/ci-tools:latest
+  services:
+  - docker:dind
+  before_script:
+  - sleep 5  # allow time for docker startup
+
+.test:
+  image: mosstech/ci-tools:latest
+  services:
+  - docker:dind
+  before_script:
+  - sleep 5  # allow time for docker startup
+
+.basic-tests:
+  stage: basic-tests
+  extends:
+  - .test
+
+# --------------- Build Stage Templates ----------------- #
+
+.build-builder:
+  stage: build-builder
+  extends:
+  - .build
+  script:
+  - ./build-builder.sh
+
+.build-distroless:
+  stage: build-distroless
+  extends:
+  - .build
+  script:
+  - ./build-distroless.sh
+
+.publish:
+  stage: publish
+  extends:
+  - .build
+  script:
+  - ./publish.sh
+  only:
+  - main
+
+# ----------------- Basic Test Stages ------------------- #
+
+.test-version:
+  extends:
+  - .basic-tests
+  script:
+  - ./test.sh --target version
+
+.test-version-debug:
+  extends:
+  - .basic-tests
+  script:
+  - ./test.sh --target version --debug

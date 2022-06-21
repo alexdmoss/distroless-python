@@ -1,0 +1,25 @@
+stages:
+- build-builder
+- build-distroless
+- basic-tests
+- publish
+
+# ---------------------- Variables ---------------------- #
+
+.python-3.9-debian11:
+  variables:
+    PYTHON_VERSION: "3.9"
+    OS_VERSION: debian11
+
+.python-3.10-debian11:
+  variables:
+    PYTHON_VERSION: "3.10"
+    OS_VERSION: debian11
+
+# --------------------- Build Stages -------------------- #
+
+include:
+- local: "stages/gitlab-templates.yaml"
+- local: "stages/python-3.9-debian11.yaml"
+- local: "stages/python-3.10-debian11.yaml"
+
