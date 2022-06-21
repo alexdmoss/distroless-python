@@ -2,91 +2,60 @@
 
 Creates a distroless container image with up-to-date python installed
 
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/alexos-dev/distroless-python.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.com/alexos-dev/distroless-python/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+---
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+No `latest` tag is offered. The intent is to be intentional (!) in your choice of version and when to upgrade.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+### python/distroless
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+In general, you're going to want this:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```dockerfile
+FROM mosstech/python-distroless:3.9-debian11
+```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+A debug image also exists:
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+```sh
+docker run --rm -it --entrypoint=sh mosstech/python-distroless:3.9-debian11-debug
+```
 
-## License
-For open source projects, say how it is licensed.
+There are variants for Python 3.9 and Python 3.10, both based on Debian 11. They are built from the `python:3.x-slim-bullseye` image base.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+> Note: Scripts in this repo will build for Apple Silicon (`-arm64` is appended to the tag), but the CI has not currently been adapted to offer this, so you'll need to build and push locally
+
+### python/builder
+
+For convenience, the `builder` image used to create the above is also published. This is **not** in general going to be useful in running python apps, but can be a convenient way to get a top layer that is `python:3.9-slim-bullseye` but with a non-root user and virtualenv/pipenv/poetry pre-installed - fewer stuff for you to sort in your Dockerfile!
+
+To use it:
+
+```dockerfile
+FROM mosstech/python-builder:3.9-debian11
+```
+
+---
+
+## Upgrading
+
+Python and OS version are set in `.gitlab-ci.yml`. This repo originates at [https://gitlab.com/alexos-dev/distroless-python](https://gitlab.com/alexos-dev/distroless-python) but is mirrored to Github [https://github.com/alexdmoss/distroless-python](https://github.com/alexdmoss/distroless-python) for convenience in sharing. Perhaps I'll convert to use Github actions at some point 🤷‍♂️
+
+---
+
+## Rationale
+
+1. Variants based on Debian (e.g. `python:*-slim-bullseye`) often have a number of vulnerabilities in them. Debian take their time responding and deal with many, and whilst this is quite often for very justifiable reasons, it is pretty toilsome work to reason about the risk and patch or suppress as needed.
+2. Alpine would be my normal go-to here but that experience with Python is grim. I believe it all stems from its use of `musl` rather than `glibc` as its standard C library. Python wheels exist for the latter (so builds are much faster) and the two are not perfectly interoperable (i.e. there are potentially subtle bugs or performance differences). [This excellent blog post](https://pythonspeed.com/articles/alpine-docker-python/) elaborates on this.
+3. The Google Distroless image for Python is marked as experimental and has been for a while, and tied to what Debian ships with - i.e. an old copy of python and dependent libraries. In other words it does not really solve for the problem statement in (1), and comes with several of its own.
+
+---
+
+## Implementation
+
+Following issues copying the Bazel-based approach used by [Google's distroless repo itself](https://github.com/GoogleContainerTools/distroless), I switched approach to a technique I understood better - multi-layer docker images. I took the distroless C image as a base and then used an earlier docker layer to bring in my choice of Python + its dependencies in.
+
+### A Note on M1 / Apple Silicon
+
+The scripts can be used locally to build an `-arm64` variant, but the CI will currently only build the x86_64 version. I haven't yet looked into options to deal with this yet.
