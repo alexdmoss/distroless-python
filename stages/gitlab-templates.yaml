@@ -56,10 +56,10 @@
   extends:
   - .basic-tests
   script:
-  - ./scripts/test.sh --target version
+  - ./scripts/tests.sh --target version
 
 .test-version-debug:
   extends:
   - .basic-tests
   script:
-  - ./scripts/test.sh --target version --debug
+  - ./scripts/tests.sh --target version --debug
