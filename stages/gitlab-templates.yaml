@@ -26,21 +26,21 @@
   extends:
   - .build
   script:
-  - ./build-builder.sh
+  - ./scripts/build-builder.sh
 
 .build-distroless:
   stage: build-distroless
   extends:
   - .build
   script:
-  - ./build-distroless.sh
+  - ./scripts/build-distroless.sh
 
 .publish:
   stage: publish
   extends:
   - .build
   script:
-  - ./publish.sh
+  - ./scripts/publish.sh
   only:
   - main
 
@@ -50,10 +50,10 @@
   extends:
   - .basic-tests
   script:
-  - ./test.sh --target version
+  - ./scripts/test.sh --target version
 
 .test-version-debug:
   extends:
   - .basic-tests
   script:
-  - ./test.sh --target version --debug
+  - ./scripts/test.sh --target version --debug
