@@ -28,6 +28,7 @@ function build_test_image() {
 
     # push for trivy scan
     if [[ ${CI_SERVER:-} == "yes" ]]; then
+        echo "${DOCKER_CREDS}" | docker login --username mosstech --password-stdin
         docker push "${image_tag}"
     fi
 
