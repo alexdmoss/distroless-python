@@ -115,3 +115,9 @@
   - .advanced-tests
   script:
   - ./scripts/tests.sh --target google-cloud
+
+.test-kubernetes:
+  extends:
+  - .advanced-tests
+  script:
+  - ./scripts/tests.sh --target kubernetes

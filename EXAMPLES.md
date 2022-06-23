@@ -44,3 +44,21 @@ We are also using the `mosstech/python-builder` docker image as the base instead
 This example does not bother with a virtual environment, and also uses a `requirements.txt` instead - just to prove that works fine. It can be a common practice to generate the requirements.txt file in CI for greater confidence in the build or easier portability.
 
 The value of a virtual environment inside a container is debatable - but many of the other examples listed here use it for a consistency with local development processes.
+
+---
+
+## [Google Cloud](tests/google-cloud/)
+
+Here we're testing one of the packages that is most awkward in `alpine` ... `grpcio`. We do this by having a bit of python that uses some Google Cloud client libraries that interact with PubSub - creating a topic then immediately deleting it.
+
+To minimise the dependency on / need to access a GCP project, we make use of the PubSub emulator - this still gives the client libraries the workout we need. The `emulator.Dockerfile` builds this if needed locally.
+
+---
+
+## [Kubernetes](tests/kubernetes/)
+
+This one works the python kubernetes client libraries. I've included it as I personally use Python with k8s a lot, so knowing the image works for this important to me - although the test doesn't actually do much different to some of the ones above.
+
+In a similar vein to the Google Cloud one, we make use of [`kind`](https://kind.sigs.k8s.io/) to spin up a small local k8s cluster to connect to as a test, rather than relying on access to one locally (which is quite painful).
+
+The downside to this test existing in CI is that this process does take a while to execute!

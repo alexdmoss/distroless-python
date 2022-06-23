@@ -58,28 +58,6 @@ function test_docker_output() {
 }
 
 
-function _console_msg() {
-
-  local msg=${1}
-  local level=${2:-}
-  local ts=${3:-}
-
-  if [[ -z ${level} ]]; then level=INFO; fi
-  if [[ -n ${ts} ]]; then ts=" [$(date +"%Y-%m-%d %H:%M")]"; fi
-
-  echo ""
-
-  if [[ ${level} == "ERROR" ]] || [[ ${level} == "CRIT" ]] || [[ ${level} == "FATAL" ]]; then
-    (echo 2>&1)
-    (echo >&2 "-> [${level}]${ts} ${msg}")
-  else
-    (echo "-> [${level}]${ts} ${msg}")
-  fi
-
-  echo ""
-
-}
-
 function test_docker_http() {
     local image_tag=$1
     local assertion=$2
@@ -105,5 +83,28 @@ function test_docker_http() {
     _console_msg "Test passed: ${output}" INFO
 
     docker rm -f distroless-test >/dev/null 2>&1 || true
+
+}
+
+
+function _console_msg() {
+
+  local msg=${1}
+  local level=${2:-}
+  local ts=${3:-}
+
+  if [[ -z ${level} ]]; then level=INFO; fi
+  if [[ -n ${ts} ]]; then ts=" [$(date +"%Y-%m-%d %H:%M")]"; fi
+
+  echo ""
+
+  if [[ ${level} == "ERROR" ]] || [[ ${level} == "CRIT" ]] || [[ ${level} == "FATAL" ]]; then
+    (echo 2>&1)
+    (echo >&2 "-> [${level}]${ts} ${msg}")
+  else
+    (echo "-> [${level}]${ts} ${msg}")
+  fi
+
+  echo ""
 
 }

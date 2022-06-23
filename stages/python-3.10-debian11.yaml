@@ -57,3 +57,8 @@ test-google-cloud-python-3.10-debian11:
   extends:
   - .test-google-cloud
   - .python-3.10-debian11
+
+test-kubernetes-python-3.10-debian11:
+  extends:
+  - .test-kubernetes
+  - .python-3.10-debian11

@@ -70,6 +70,15 @@ if [[ ${target} == "google-cloud" ]] || [[ ${target} == "ALL" ]]; then
     test_google_cloud_image "${IMAGE_NAME}" "Topic \[projects/made-up-project/topics/alexos-distroless-python-test\]"
 fi
 
+if [[ ${target} == "kubernetes" ]] || [[ ${target} == "ALL" ]]; then
+    test_run=1
+    . ./tests/kubernetes/test_kubernetes.sh
+    IMAGE_NAME="${TEST_IMAGE_BASE}"/kubernetes"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    build_test_image "${IMAGE_NAME}" "kubernetes"
+    test_kubernetes_image "${IMAGE_NAME}" "distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}"
+fi
+
+
 # ----------------------------------------------------------
 
 if [[ $failures -gt 0 ]]; then
