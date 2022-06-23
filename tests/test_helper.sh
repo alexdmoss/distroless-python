@@ -26,11 +26,6 @@ function build_test_image() {
         failures=$((failures + 1))
     fi
 
-    # push for trivy scan
-    if [[ ${CI_SERVER:-} == "yes" ]]; then
-        docker push "${image_tag}"
-    fi
-
     popd >/dev/null || exit
 
 }
@@ -67,6 +62,8 @@ function test_docker_http() {
     docker rm -f distroless-test >/dev/null 2>&1 || true
     docker run --rm --detach --name=distroless-test -p 5000:5000 "${image_tag}"
     sleep 5     # CI needs a bit of time ... yawn
+
+    docker ps
 
     output=$(curl -iks http://localhost:5000/)
 

@@ -74,7 +74,7 @@ if [[ ${target} == "kubernetes" ]] || [[ ${target} == "ALL" ]]; then
     test_run=1
     . ./tests/kubernetes/test_kubernetes.sh
     IMAGE_NAME="${TEST_IMAGE_BASE}"/kubernetes"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
-    build_test_image "${IMAGE_NAME}" "kubernetes"
+    build_test_image "${IMAGE_NAME}" "kubernetes" push
     test_kubernetes_image "${IMAGE_NAME}" "distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}"
 fi
 

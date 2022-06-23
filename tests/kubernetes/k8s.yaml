@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: distroless-python-test
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: distroless-python-test
+  namespace: default
+rules:
+- apiGroups:
+  - "apps"
+  resources:
+  - deployments
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: distroless-python-test
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: distroless-python-test
+subjects:
+- kind: ServiceAccount
+  name: distroless-python-test
+  namespace: default
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}
+  namespace: default
+  labels:
+    app: distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}
+    spec:
+      serviceAccount: distroless-python-test
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 1
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: distroless-python-test
+          image: ${IMAGE_TAG}
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 100m
+            limits:
+              memory: 100Mi
+              cpu: 100m
+          securityContext:
+            readOnlyRootFilesystem: true
