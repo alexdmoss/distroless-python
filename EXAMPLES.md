@@ -36,3 +36,11 @@ This example uses `pipenv` instead of `poetry` to show how that can be handled i
 We are also using the `mosstech/python-builder` docker image as the base instead of `python:slim-bullseye` - in practice this just saves us needing to bother installing `pipenv` really.
 
 ---
+
+## [Pandas](tests/pandas/)
+
+`pandas` dependency on `numpy` forces changes in the base image that the distroless one is built from - so a good test. A choice here was to make the required changes in distroless itself, or layer it in just for this image. I chose the latter in this case to demonstrate how this can be done (and also because I use `pandas` rarely myself, tbh).
+
+This example does not bother with a virtual environment, and also uses a `requirements.txt` instead - just to prove that works fine. It can be a common practice to generate the requirements.txt file in CI for greater confidence in the build or easier portability.
+
+The value of a virtual environment inside a container is debatable - but many of the other examples listed here use it for a consistency with local development processes.

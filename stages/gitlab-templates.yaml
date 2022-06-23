@@ -101,3 +101,9 @@
   - .advanced-tests
   script:
   - ./test.sh --target fastapi
+
+.test-pandas:
+  extends:
+  - .advanced-tests
+  script:
+  - ./test.sh --target pandas

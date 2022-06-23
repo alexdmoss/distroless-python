@@ -47,3 +47,8 @@ test-fastapi-python-3.10-debian11:
   extends:
   - .test-fastapi
   - .python-3.10-debian11
+
+test-pandas-python-3.10-debian11:
+  extends:
+  - .test-pandas
+  - .python-3.10-debian11
