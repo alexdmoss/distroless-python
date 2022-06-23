@@ -62,6 +62,14 @@ if [[ ${target} == "pandas" ]] || [[ ${target} == "ALL" ]]; then
     test_docker_output "${IMAGE_NAME}" "The Mainframe says: 2"
 fi
 
+if [[ ${target} == "google-cloud" ]] || [[ ${target} == "ALL" ]]; then
+    test_run=1
+    . ./tests/google-cloud/test_google_cloud.sh
+    IMAGE_NAME="${TEST_IMAGE_BASE}"/google-cloud"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    build_test_image "${IMAGE_NAME}" "google-cloud"
+    test_google_cloud_image "${IMAGE_NAME}" "Topic \[projects/made-up-project/topics/alexos-distroless-python-test\]"
+fi
+
 # ----------------------------------------------------------
 
 if [[ $failures -gt 0 ]]; then
