@@ -96,3 +96,9 @@
   - .advanced-tests
   script:
   - ./scripts/tests.sh --target gunicorn
+
+.test-fastapi:
+  extends:
+  - .advanced-tests
+  script:
+  - ./test.sh --target fastapi

@@ -42,3 +42,8 @@ test-gunicorn-python-3.10-debian11:
   extends:
   - .test-gunicorn
   - .python-3.10-debian11
+
+test-fastapi-python-3.10-debian11:
+  extends:
+  - .test-fastapi
+  - .python-3.10-debian11

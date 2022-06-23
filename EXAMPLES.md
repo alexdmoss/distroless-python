@@ -26,3 +26,13 @@ This was the first complex test. Running just the unicorn wsgi server without le
 This repo was converted from an initial pipenv-based one to use poetry, as poetry is capable of supporting both python 3.9 and 3.10, whereas the Pipfile does not support this. This caused a particular issue for this test, as Flask depends on `importlib-metadata`, which is built into 3.10 but not in 3.9. Pipfile.lock file issues ensued!
 
 ---
+
+## [Fast API](tests/fastapi/)
+
+Simple FastAPI app. As for the Flask/Gunicorn exampel above, note the use of `run.py` to deal with entrypoint. We cannot run `uvicorn` directly - a small wrapper script is used so that we can execute it through the normal `python` entrypoint. Its CLI syntax is a bit different to `gunicorn`.
+
+This example uses `pipenv` instead of `poetry` to show how that can be handled in a relatively straight-forward way.
+
+We are also using the `mosstech/python-builder` docker image as the base instead of `python:slim-bullseye` - in practice this just saves us needing to bother installing `pipenv` really.
+
+---
