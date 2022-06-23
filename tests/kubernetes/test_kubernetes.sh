@@ -24,18 +24,12 @@ function test_kubernetes_image() {
     CLUSTER=distroless-test-$(( RANDOM%100000 ))
 
     kind create cluster --name="${CLUSTER}" --wait=60s
+    kubectl get ns
 
     # believe it or not this seems easier than getting .kube/config to work inside distroless ...
-    pushd "$(dirname "${BASH_SOURCE[0]}")/" >/dev/null || exit
-
-    if [[ ${CI_SERVER:-} == "yes" ]]; then
-        docker push "${image_tag}"
-    fi
-    
     export IMAGE_TAG="${image_tag}"
-    envsubst "\$IMAGE_TAG \$PYTHON_VERSION \$OS_VERSION" < k8s.yaml | kubectl apply -n=default -f -
+    envsubst "\$IMAGE_TAG \$PYTHON_VERSION \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply -n=default -f -
     kubectl rollout status deploy/distroless-python-test-"${PYTHON_VERSION}"-"${OS_VERSION}" -n=default --timeout=120s
-    popd >/dev/null || exit
     
     sleep 10
 
