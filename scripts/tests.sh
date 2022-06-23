@@ -41,6 +41,13 @@ if [[ ${target} == "hello-world" ]] || [[ ${target} == "ALL" ]]; then
     test_docker_output "${IMAGE_NAME}" "hello there"
 fi
 
+if [[ ${target} == "gunicorn" ]] || [[ ${target} == "ALL" ]]; then
+    test_run=1
+    IMAGE_NAME="${TEST_IMAGE_BASE}"/gunicorn"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    build_test_image "${IMAGE_NAME}" "gunicorn"
+    test_docker_http "${IMAGE_NAME}" "flask/gunicorn"
+fi
+
 # ----------------------------------------------------------
 
 if [[ $failures -gt 0 ]]; then

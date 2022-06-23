@@ -79,3 +79,31 @@ function _console_msg() {
   echo ""
 
 }
+
+function test_docker_http() {
+    local image_tag=$1
+    local assertion=$2
+
+    _console_msg "Testing http output for [${image_tag}]" INFO
+
+    docker rm -f distroless-test >/dev/null 2>&1 || true
+    docker run --rm --detach --name=distroless-test -p 5000:5000 "${image_tag}"
+    sleep 5     # CI needs a bit of time ... yawn
+
+    output=$(curl -iks http://localhost:5000/)
+
+    if [[ $(echo "${output}" | grep -c "${assertion}") -eq 0 ]]; then
+        _console_msg "Test failed: [$assertion] not found in output [$output]" ERROR
+        failures=$((failures + 1))
+    fi
+
+    if [[ $(echo "${output}" | grep -c "200 OK") -eq 0 ]]; then
+        _console_msg "Test failed: HTTP 200 return code not received" ERROR
+        failures=$((failures + 1))
+    fi
+
+    _console_msg "Test passed: ${output}" INFO
+
+    docker rm -f distroless-test >/dev/null 2>&1 || true
+
+}

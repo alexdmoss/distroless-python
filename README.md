@@ -8,6 +8,8 @@ Creates a distroless container image with up-to-date python installed
 
 No `latest` tag is offered. The intent is to be intentional (!) in your choice of version and when to upgrade.
 
+Usage examples can be found in the [`tests/`](tests/) directory. These are also described in [EXAMPLES.md](EXAMPLES.md).
+
 ### python/distroless
 
 In general, you're going to want this:

@@ -25,6 +25,12 @@
   extends:
   - .test
 
+.advanced-tests:
+  stage: advanced-tests
+  extends:
+  - .test
+  - .test_variables
+
 # --------------- Build Stage Templates ----------------- #
 
 .build-builder:
@@ -75,10 +81,18 @@
   extends:
   - .basic-tests
   script:
-  - ./scripts/test.sh --target hello-world
+  - ./scripts/tests.sh --target hello-world
 
 .test-hello-world-debug:
   extends:
   - .basic-tests
   script:
-  - ./scripts/test.sh --target hello-world --debug
+  - ./scripts/tests.sh --target hello-world --debug
+
+# ---------------- Advanced Test Stages ----------------- #
+
+.test-gunicorn:
+  extends:
+  - .advanced-tests
+  script:
+  - ./scripts/tests.sh --target gunicorn

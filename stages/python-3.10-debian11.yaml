@@ -37,3 +37,8 @@ test-hello-world-debug-python-3.10-debian11:
   extends:
   - .test-hello-world-debug
   - .python-3.10-debian11
+
+test-gunicorn-python-3.10-debian11:
+  extends:
+  - .test-gunicorn
+  - .python-3.10-debian11
