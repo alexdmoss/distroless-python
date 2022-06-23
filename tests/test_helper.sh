@@ -59,13 +59,17 @@ function test_docker_http() {
 
     _console_msg "Testing http output for [${image_tag}]" INFO
 
+    if [[ ${CI_SERVER:-} == "yes" ]]; then
+        export HOSTNAME=docker
+    else
+        export HOSTNAME=localhost
+    fi
+
     docker rm -f distroless-test >/dev/null 2>&1 || true
     docker run --rm --detach --name=distroless-test -p 5000:5000 "${image_tag}"
     sleep 5     # CI needs a bit of time ... yawn
 
-    docker ps
-
-    output=$(curl -iks http://localhost:5000/)
+    output=$(curl -iks http://${HOSTNAME}:5000/)
 
     if [[ $(echo "${output}" | grep -c "${assertion}") -eq 0 ]]; then
         _console_msg "Test failed: [$assertion] not found in output [$output]" ERROR

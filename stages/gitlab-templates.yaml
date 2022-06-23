@@ -22,9 +22,6 @@
   - docker:dind
   before_script:
   - sleep 5  # allow time for docker startup
-  - echo "${DOCKER_CREDS}" | docker login --username mosstech --password-stdin
-  after_script:
-  - rm -f /root/.docker/config.json
 
 .basic-tests:
   stage: basic-tests
