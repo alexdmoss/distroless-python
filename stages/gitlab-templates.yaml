@@ -109,3 +109,9 @@
   - .advanced-tests
   script:
   - ./scripts/tests.sh --target pandas
+
+.test-google-cloud:
+  extends:
+  - .advanced-tests
+  script:
+  - ./scripts/tests.sh --target google-cloud
