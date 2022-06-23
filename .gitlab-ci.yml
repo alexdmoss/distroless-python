@@ -2,9 +2,13 @@ stages:
 - build-builder
 - build-distroless
 - basic-tests
+- scan
 - publish
 
 # ---------------------- Variables ---------------------- #
+
+variables:
+  TRIVY_VERSION: "v0.29.2"
 
 .python-3.9-debian11:
   variables:

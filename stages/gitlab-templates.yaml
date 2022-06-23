@@ -41,6 +41,13 @@
   script:
   - ./scripts/build-distroless.sh
 
+.scan:
+  stage: scan
+  extends:
+  - .build
+  script:
+  - ./scripts/scan.sh
+
 .publish:
   stage: publish
   extends:

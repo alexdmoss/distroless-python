@@ -8,6 +8,11 @@ build-distroless-python-3.9-debian11:
   - .build-distroless
   - .python-3.9-debian11
 
+scan-python-3.9-debian11:
+  extends:
+  - .scan
+  - .python-3.9-debian11
+
 publish-python-3.9-debian11:
   extends:
   - .publish
