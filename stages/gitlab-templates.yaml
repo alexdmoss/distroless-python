@@ -29,7 +29,6 @@
   stage: advanced-tests
   extends:
   - .test
-  - .test_variables
 
 # --------------- Build Stage Templates ----------------- #
 
