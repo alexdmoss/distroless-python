@@ -70,3 +70,15 @@
   - .basic-tests
   script:
   - ./scripts/tests.sh --target version --debug
+
+.test-hello-world:
+  extends:
+  - .basic-tests
+  script:
+  - ./scripts/test.sh --target hello-world
+
+.test-hello-world-debug:
+  extends:
+  - .basic-tests
+  script:
+  - ./scripts/test.sh --target hello-world --debug

@@ -27,3 +27,13 @@ test-version-debug-python-3.9-debian11:
   extends:
   - .test-version-debug
   - .python-3.9-debian11
+
+test-hello-world-python-3.9-debian11:
+  extends:
+  - .test-hello-world
+  - .python-3.9-debian11
+
+test-hello-world-debug-python-3.9-debian11:
+  extends:
+  - .test-hello-world-debug
+  - .python-3.9-debian11

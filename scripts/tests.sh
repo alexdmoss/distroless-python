@@ -27,11 +27,21 @@ if [[ ${debug:-} == 1 ]]; then
     _console_msg "Running tests against the DEBUG images" INFO
 fi
 
+# ----------------------------------------------------------
+
 if [[ ${target} == "version" ]] || [[ ${target} == "ALL" ]]; then
     test_run=1
     test_docker_output "${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}" "Python ${PYTHON_VERSION}" "--version"
 fi
 
+if [[ ${target} == "hello-world" ]] || [[ ${target} == "ALL" ]]; then
+    test_run=1
+    IMAGE_NAME="${TEST_IMAGE_BASE}"/hello-world"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    build_test_image "${IMAGE_NAME}" "hello-world"
+    test_docker_output "${IMAGE_NAME}" "hello there"
+fi
+
+# ----------------------------------------------------------
 
 if [[ $failures -gt 0 ]]; then
     _console_msg "Oh no, ${failures} tests FAILED. See output above for more detail" ERROR

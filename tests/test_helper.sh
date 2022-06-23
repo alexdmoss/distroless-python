@@ -7,6 +7,35 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 fi
 
 
+function build_test_image() {
+    local image_tag=$1
+    local test_name=$2
+
+    _console_msg "Building test image [${test_name}]" INFO
+
+    pushd "$(dirname "${BASH_SOURCE[0]}")/${test_name}" >/dev/null || exit
+
+    docker build \
+        --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
+        --build-arg PYTHON_BUILDER_IMAGE="${PYTHON_BUILDER_IMAGE}" \
+        --build-arg PYTHON_DISTROLESS_IMAGE="${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}" \
+        -t "${image_tag}" .
+
+    if [[ "${?}" -gt 0 ]]; then
+        _console_msg "Build FAILED" ERROR
+        failures=$((failures + 1))
+    fi
+
+    # push for trivy scan
+    if [[ ${CI_SERVER:-} == "yes" ]]; then
+        docker push "${image_tag}"
+    fi
+
+    popd >/dev/null || exit
+
+}
+
+
 function test_docker_output() {
     local image_tag=$1
     local assertion=$2
