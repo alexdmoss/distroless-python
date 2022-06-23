@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ouE pipefail
+set -oeuE pipefail
 
 pushd "$(dirname "${BASH_SOURCE[0]}")/../" >/dev/null || exit
 
