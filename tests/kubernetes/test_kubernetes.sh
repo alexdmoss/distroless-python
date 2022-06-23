@@ -13,9 +13,9 @@ function test_kubernetes_image() {
 
     if [[ ${CI_SERVER:-} == "yes" ]]; then
         _console_msg "Installing Kind ..." INFO
-        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.14.0/kind-linux-amd64
+        curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.14.0/kind-linux-amd64
         chmod +x ./kind
-        mv ./kind /usr/local/kind
+        mv ./kind /usr/local/bin/kind
     fi
 
     # using kind helps us minimise our dependencies on another cluster existing somewhere
