@@ -29,7 +29,6 @@ docker build \
     -f distroless.Dockerfile .
 
 if [[ ${CI_SERVER:-} == "yes" ]]; then
-    echo "${DOCKER_CREDS}" | docker login --username mosstech --password-stdin
     docker push "${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}"
     docker push "${PYTHON_DISTROLESS_IMAGE}-debug-intermediate-${CI_PIPELINE_ID}"
 fi

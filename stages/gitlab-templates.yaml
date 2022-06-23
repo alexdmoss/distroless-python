@@ -9,6 +9,7 @@
   - docker:dind
   before_script:
   - sleep 5  # allow time for docker startup
+  - echo "${DOCKER_CREDS}" | docker login --username mosstech --password-stdin
 
 .test:
   image: mosstech/gcloud-and-docker:390.0.0
@@ -19,6 +20,7 @@
   - docker:dind
   before_script:
   - sleep 5  # allow time for docker startup
+  - echo "${DOCKER_CREDS}" | docker login --username mosstech --password-stdin
 
 .basic-tests:
   stage: basic-tests
