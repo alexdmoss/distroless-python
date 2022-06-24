@@ -18,14 +18,9 @@ cat /root/.kube/config
 
 docker ps
 
-kind get kubeconfig | sed -e 's/0.0.0.0/kubernetes/g' > /root/.kube/config
+kind get kubeconfig | sed -e 's/0.0.0.0/docker/g' > /root/.kube/config
 
 # will fail, not auth'd
-echo "DBEUG: 127.0.0.1"
-curl -v https://127.0.0.1:6443/api --insecure
-
-echo "DEBUG: localhost"
-curl -v https://localhost:6443/api --insecure
 
 echo "DEBUG: docker"
 curl -v https://docker:6443/api --insecure
@@ -33,24 +28,18 @@ curl -v https://docker:6443/api --insecure
 echo "DEBUG: kubernetes"
 curl -v https://kubernetes:6443/api --insecure
 
-echo "DEBUG: get cluster info"
-kubectl cluster-info 
 
-echo "DEBUG: get namespaces"
-kubectl get ns 
+kubectl config set-cluster kind-${CLUSTER} --server=https://docker:6443
 
-
-echo "DEBUG: get cluster info (kind*)"
+echo "DEBUG: get cluster info (docker)"
 kubectl cluster-info --context kind-${CLUSTER}
-
-echo "DEBUG: get namespaces (kind*)"
 kubectl get ns --context kind-${CLUSTER}
 
 kubectl config set-cluster kind-${CLUSTER} --server=https://kubernetes:6443
 
-echo "DEBUG: get cluster info (overridden)"
+echo "DEBUG: get cluster info (kubernetes)"
 kubectl cluster-info --context kind-${CLUSTER}
-
+kubectl get ns --context kind-${CLUSTER}
 # # believe it or not this seems easier than getting .kube/config to work inside distroless ...
 # export IMAGE_TAG="${image_tag}"
 # envsubst "\$IMAGE_TAG \$PYTHON_VERSION \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply -n=default -f -
