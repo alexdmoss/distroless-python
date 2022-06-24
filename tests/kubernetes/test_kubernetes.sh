@@ -35,9 +35,15 @@ function test_kubernetes_image() {
     export IMAGE_TAG="${image_tag}"
     envsubst "\$IMAGE_TAG \$PYTHON_VERSION \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply  -n=default -f -
     
+    kubectl get deploy -n=default
+    kubectl get pods -n=default
+
     kubectl rollout status deploy/distroless-python-test-"${PYTHON_VERSION}"-"${OS_VERSION}" -n=default --timeout=120s
     
     sleep 10
+
+    kubectl get deploy -n=default
+    kubectl get pods -n=default
 
     output=$(kubectl logs -l=app=distroless-python-test-"${PYTHON_VERSION}"-"${OS_VERSION}" -n=default)
 
