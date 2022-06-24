@@ -10,23 +10,23 @@ CLUSTER=distroless-test-$(( RANDOM%100000 ))
 echo "DEBUG: create cluster"
 kind create cluster --name="${CLUSTER}" --config=kind.yaml --wait=60s
 
-echo "DEBUG: list clusters"
-kind get clusters
+# echo "DEBUG: list clusters"
+# kind get clusters
 
-echo "DEBUG: cluster context"
-cat /root/.kube/config
+# echo "DEBUG: cluster context"
+# cat /root/.kube/config
 
-docker ps
+# docker ps
 
-kind get kubeconfig | sed -e 's/0.0.0.0/docker/g' > /root/.kube/config
+kind get kubeconfig --name="${CLUSTER}" | sed -e 's/0.0.0.0/docker/g' > /root/.kube/config
 
 # will fail, not auth'd
 
 echo "DEBUG: docker"
 curl -v https://docker:6443/api --insecure
 
-echo "DEBUG: kubernetes"
-curl -v https://kubernetes:6443/api --insecure
+# echo "DEBUG: kubernetes"
+# curl -v https://kubernetes:6443/api --insecure
 
 
 kubectl config set-cluster kind-${CLUSTER} --server=https://docker:6443
@@ -35,11 +35,11 @@ echo "DEBUG: get cluster info (docker)"
 kubectl cluster-info --context kind-${CLUSTER}
 kubectl get ns --context kind-${CLUSTER}
 
-kubectl config set-cluster kind-${CLUSTER} --server=https://kubernetes:6443
+# kubectl config set-cluster kind-${CLUSTER} --server=https://kubernetes:6443
 
-echo "DEBUG: get cluster info (kubernetes)"
-kubectl cluster-info --context kind-${CLUSTER}
-kubectl get ns --context kind-${CLUSTER}
+# echo "DEBUG: get cluster info (kubernetes)"
+# kubectl cluster-info --context kind-${CLUSTER}
+# kubectl get ns --context kind-${CLUSTER}
 # # believe it or not this seems easier than getting .kube/config to work inside distroless ...
 # export IMAGE_TAG="${image_tag}"
 # envsubst "\$IMAGE_TAG \$PYTHON_VERSION \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply -n=default -f -
