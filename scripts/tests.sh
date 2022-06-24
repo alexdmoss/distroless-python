@@ -36,28 +36,28 @@ fi
 
 if [[ ${target} == "hello-world" ]] || [[ ${target} == "ALL" ]]; then
     test_run=1
-    IMAGE_NAME="${TEST_IMAGE_BASE}"/hello-world"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    IMAGE_NAME="${TEST_IMAGE_BASE}"-hello-world"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
     build_test_image "${IMAGE_NAME}" "hello-world"
     test_docker_output "${IMAGE_NAME}" "hello there"
 fi
 
 if [[ ${target} == "gunicorn" ]] || [[ ${target} == "ALL" ]]; then
     test_run=1
-    IMAGE_NAME="${TEST_IMAGE_BASE}"/gunicorn"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    IMAGE_NAME="${TEST_IMAGE_BASE}"-gunicorn"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
     build_test_image "${IMAGE_NAME}" "gunicorn"
     test_docker_http "${IMAGE_NAME}" "flask/gunicorn"
 fi
 
 if [[ ${target} == "fastapi" ]] || [[ ${target} == "ALL" ]]; then
     test_run=1
-    IMAGE_NAME="${TEST_IMAGE_BASE}"/fastapi"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    IMAGE_NAME="${TEST_IMAGE_BASE}"-fastapi"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
     build_test_image "${IMAGE_NAME}" "fastapi"
     test_docker_http "${IMAGE_NAME}" "I am alive"
 fi
 
 if [[ ${target} == "pandas" ]] || [[ ${target} == "ALL" ]]; then
     test_run=1
-    IMAGE_NAME="${TEST_IMAGE_BASE}"/pandas"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    IMAGE_NAME="${TEST_IMAGE_BASE}"-pandas"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
     build_test_image "${IMAGE_NAME}" "pandas"
     test_docker_output "${IMAGE_NAME}" "The Mainframe says: 2"
 fi
@@ -65,7 +65,7 @@ fi
 if [[ ${target} == "google-cloud" ]] || [[ ${target} == "ALL" ]]; then
     test_run=1
     . ./tests/google-cloud/test_google_cloud.sh
-    IMAGE_NAME="${TEST_IMAGE_BASE}"/google-cloud"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    IMAGE_NAME="${TEST_IMAGE_BASE}"-google-cloud"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
     build_test_image "${IMAGE_NAME}" "google-cloud"
     test_google_cloud_image "${IMAGE_NAME}" "Topic \[projects/made-up-project/topics/alexos-distroless-python-test\]"
 fi
@@ -73,8 +73,8 @@ fi
 if [[ ${target} == "kubernetes" ]] || [[ ${target} == "ALL" ]]; then
     test_run=1
     . ./tests/kubernetes/test_kubernetes.sh
-    IMAGE_NAME="${TEST_IMAGE_BASE}"/kubernetes"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
-    build_test_image "${IMAGE_NAME}" "kubernetes" push
+    IMAGE_NAME="${TEST_IMAGE_BASE}"-kubernetes"${ARCH}":"${PYTHON_VERSION}-${OS_VERSION}-${CI_PIPELINE_ID}"
+    build_test_image "${IMAGE_NAME}" "kubernetes"
     test_kubernetes_image "${IMAGE_NAME}" "distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}"
 fi
 
