@@ -1,45 +1,29 @@
-# stages:
-# - build-builder
-# - build-distroless
-# - basic-tests
-# - advanced-tests
-# - scan
-# - publish
-
-# # ---------------------- Variables ---------------------- #
-
-# variables:
-#   TRIVY_VERSION: "0.29.2"
-
-# .python-3.9-debian11:
-#   variables:
-#     PYTHON_VERSION: "3.9"
-#     OS_VERSION: debian11
-
-# .python-3.10-debian11:
-#   variables:
-#     PYTHON_VERSION: "3.10"
-#     OS_VERSION: debian11
-
-# # --------------------- Build Stages -------------------- #
-
-# include:
-# - local: "stages/gitlab-templates.yaml"
-# - local: "stages/python-3.9-debian11.yaml"
-# - local: "stages/python-3.10-debian11.yaml"
-
 stages:
-- debug
+- build-builder
+- build-distroless
+- basic-tests
+- advanced-tests
+- scan
+- publish
 
-debug:
-  stage: debug
-  image: mosstech/gcloud-and-docker:390.0.0
+# ---------------------- Variables ---------------------- #
+
+variables:
+  TRIVY_VERSION: "0.29.2"
+
+.python-3.9-debian11:
   variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-  services:
-  - docker:dind
-  before_script:
-  - sleep 5  # allow time for docker startup
-  script:
-  - ./kind_debug.sh
+    PYTHON_VERSION: "3.9"
+    OS_VERSION: debian11
+
+.python-3.10-debian11:
+  variables:
+    PYTHON_VERSION: "3.10"
+    OS_VERSION: debian11
+
+# --------------------- Build Stages -------------------- #
+
+include:
+- local: "stages/gitlab-templates.yaml"
+- local: "stages/python-3.9-debian11.yaml"
+- local: "stages/python-3.10-debian11.yaml"

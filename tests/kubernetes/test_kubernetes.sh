@@ -23,21 +23,18 @@ function test_kubernetes_image() {
 
     CLUSTER=distroless-test-$(( RANDOM%100000 ))
 
-    kind create cluster --name="${CLUSTER}" --wait=60s
+    kind create cluster --name="${CLUSTER}" --config=kind.yaml --wait=60s
 
-    echo "DEBUG: list clusters"
-    kind get clusters
+    _console_msg "Configure kubectl context when using kind inside gitlab-ci dind ..." INFO
 
-    echo "DEBUG: get cluster info"
-    kubectl cluster-info --context ${CLUSTER}
-
-
-    echo "DEBUG: get namespaces"
-    kubectl get ns --context ${CLUSTER}
+    kubectl config set-cluster kind-${CLUSTER} --server=https://docker:6443 --insecure-skip-tls-verify=true
+    kubectl config use-context kind-${CLUSTER}
+    kubectl cluster-info
 
     # believe it or not this seems easier than getting .kube/config to work inside distroless ...
     export IMAGE_TAG="${image_tag}"
-    envsubst "\$IMAGE_TAG \$PYTHON_VERSION \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply -n=default -f -
+    envsubst "\$IMAGE_TAG \$PYTHON_VERSION \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply  -n=default -f -
+    
     kubectl rollout status deploy/distroless-python-test-"${PYTHON_VERSION}"-"${OS_VERSION}" -n=default --timeout=120s
     
     sleep 10
