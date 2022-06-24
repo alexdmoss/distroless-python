@@ -2,6 +2,7 @@ stages:
 - build-builder
 - build-distroless
 - basic-tests
+- http-tests
 - advanced-tests
 - scan
 - publish
