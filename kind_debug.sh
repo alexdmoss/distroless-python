@@ -18,6 +18,17 @@ cat /root/.kube/config
 
 docker ps
 
+# will fail, not auth'd
+echo "DBEUG: 127.0.0.1"
+curl -v https://127.0.0.1:6443/api --insecure
+
+echo "DEBUG: localhost"
+curl -v https://localhost:6443/api --insecure
+
+echo "DEBUG: docker"
+curl -v https://docker:6443/api --insecure
+
+
 echo "DEBUG: get cluster info (kind*)"
 kubectl cluster-info --context kind-${CLUSTER}
 
