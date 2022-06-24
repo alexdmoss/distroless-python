@@ -17,17 +17,7 @@
   before_script:
   - sleep 5  # allow time for docker startup
 
-.basic-tests:
-  stage: basic-tests
-  extends:
-  - .test
-
-.advanced-tests:
-  stage: advanced-tests
-  extends:
-  - .test
-
-# --------------- Build Stage Templates ----------------- #
+# -----------------  Stage Templates -------------------- #
 
 .build-builder:
   stage: build-builder
@@ -42,6 +32,33 @@
   - .build
   script:
   - ./scripts/build-distroless.sh
+
+.basic-tests:
+  stage: basic-tests
+  extends:
+  - .test
+  script:
+  - ./scripts/tests.sh --target version
+  - ./scripts/tests.sh --target version --debug
+  - ./scripts/tests.sh --target hello-world
+  - ./scripts/tests.sh --target hello-world --debug
+
+.http-tests:
+  stage: http-tests
+  extends:
+  - .test
+  script:
+  - ./scripts/tests.sh --target gunicorn
+  - ./scripts/tests.sh --target fastapi
+
+.advanced-tests:
+  stage: advanced-tests
+  extends:
+  - .test
+  script:
+  - ./scripts/tests.sh --target pandas
+  - ./scripts/tests.sh --target google-cloud
+  - ./scripts/tests.sh --target kubernetes
 
 .scan:
   stage: scan
@@ -58,61 +75,3 @@
   - ./scripts/publish.sh
   only:
   - main
-
-# ----------------- Basic Test Stages ------------------- #
-
-.test-version:
-  extends:
-  - .basic-tests
-  script:
-  - ./scripts/tests.sh --target version
-
-.test-version-debug:
-  extends:
-  - .basic-tests
-  script:
-  - ./scripts/tests.sh --target version --debug
-
-.test-hello-world:
-  extends:
-  - .basic-tests
-  script:
-  - ./scripts/tests.sh --target hello-world
-
-.test-hello-world-debug:
-  extends:
-  - .basic-tests
-  script:
-  - ./scripts/tests.sh --target hello-world --debug
-
-# ---------------- Advanced Test Stages ----------------- #
-
-.test-gunicorn:
-  extends:
-  - .advanced-tests
-  script:
-  - ./scripts/tests.sh --target gunicorn
-
-.test-fastapi:
-  extends:
-  - .advanced-tests
-  script:
-  - ./scripts/tests.sh --target fastapi
-
-.test-pandas:
-  extends:
-  - .advanced-tests
-  script:
-  - ./scripts/tests.sh --target pandas
-
-.test-google-cloud:
-  extends:
-  - .advanced-tests
-  script:
-  - ./scripts/tests.sh --target google-cloud
-
-.test-kubernetes:
-  extends:
-  - .advanced-tests
-  script:
-  - ./scripts/tests.sh --target kubernetes

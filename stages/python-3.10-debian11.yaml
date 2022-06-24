@@ -8,6 +8,21 @@ build-distroless-python-3.10-debian11:
   - .build-distroless
   - .python-3.10-debian11
 
+basic-tests-python-3.10-debian11:
+  extends:
+  - .basic-tests
+  - .python-3.10-debian11
+
+http-tests-python-3.10-debian11:
+  extends:
+  - .http-tests
+  - .python-3.10-debian11
+
+advanced-tests-python-3.10-debian11:
+  extends:
+  - .advanced-tests
+  - .python-3.10-debian11
+
 scan-python-3.10-debian11:
   extends:
   - .scan
@@ -16,49 +31,4 @@ scan-python-3.10-debian11:
 publish-python-3.10-debian11:
   extends:
   - .publish
-  - .python-3.10-debian11
-
-test-version-python-3.10-debian11:
-  extends:
-  - .test-version
-  - .python-3.10-debian11
-
-test-version-debug-python-3.10-debian11:
-  extends:
-  - .test-version-debug
-  - .python-3.10-debian11
-
-test-hello-world-python-3.10-debian11:
-  extends:
-  - .test-hello-world
-  - .python-3.10-debian11
-
-test-hello-world-debug-python-3.10-debian11:
-  extends:
-  - .test-hello-world-debug
-  - .python-3.10-debian11
-
-test-gunicorn-python-3.10-debian11:
-  extends:
-  - .test-gunicorn
-  - .python-3.10-debian11
-
-test-fastapi-python-3.10-debian11:
-  extends:
-  - .test-fastapi
-  - .python-3.10-debian11
-
-test-pandas-python-3.10-debian11:
-  extends:
-  - .test-pandas
-  - .python-3.10-debian11
-
-test-google-cloud-python-3.10-debian11:
-  extends:
-  - .test-google-cloud
-  - .python-3.10-debian11
-
-test-kubernetes-python-3.10-debian11:
-  extends:
-  - .test-kubernetes
   - .python-3.10-debian11
