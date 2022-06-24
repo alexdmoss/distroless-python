@@ -24,7 +24,16 @@ function test_kubernetes_image() {
     CLUSTER=distroless-test-$(( RANDOM%100000 ))
 
     kind create cluster --name="${CLUSTER}" --wait=60s
-    kubectl get ns
+
+    echo "DEBUG: list clusters"
+    kind get clusters
+
+    echo "DEBUG: get cluster info"
+    kubectl cluster-info --context ${CLUSTER}
+
+
+    echo "DEBUG: get namespaces"
+    kubectl get ns --context ${CLUSTER}
 
     # believe it or not this seems easier than getting .kube/config to work inside distroless ...
     export IMAGE_TAG="${image_tag}"
