@@ -18,7 +18,7 @@ kind create cluster --name="${CLUSTER}" --config=kind.yaml --wait=60s
 
 # docker ps
 
-kind get kubeconfig --name="${CLUSTER}" | sed -e 's/0.0.0.0/docker/g' > /root/.kube/config
+# kind get kubeconfig --name="${CLUSTER}" | sed -e 's/0.0.0.0/docker/g' > /root/.kube/config
 
 # will fail, not auth'd
 
@@ -29,7 +29,7 @@ curl -v https://docker:6443/api --insecure
 # curl -v https://kubernetes:6443/api --insecure
 
 
-kubectl config set-cluster kind-${CLUSTER} --server=https://docker:6443
+# kubectl config set-cluster kind-${CLUSTER} --server=https://docker:6443
 
 echo "DEBUG: get cluster info (docker)"
 kubectl cluster-info --context kind-${CLUSTER}
