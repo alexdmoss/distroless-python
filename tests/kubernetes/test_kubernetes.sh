@@ -44,6 +44,8 @@ function test_kubernetes_image() {
     
     kubectl get pods -n=default
     kubectl describe pods -l=app=distroless-python-test-"${PYTHON_VERSION}"-"${OS_VERSION}" -n=default
+    kubectl top pods -A
+    kubectl top nodes -A
     sleep 10
 
     output=$(kubectl logs -l=app=distroless-python-test-"${PYTHON_VERSION}"-"${OS_VERSION}" -n=default)
