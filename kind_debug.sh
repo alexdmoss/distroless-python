@@ -8,7 +8,7 @@ mv ./kind /usr/local/bin/kind
 CLUSTER=distroless-test-$(( RANDOM%100000 ))
 
 echo "DEBUG: create cluster"
-kind create cluster --name="${CLUSTER}" --wait=60s
+kind create cluster --name="${CLUSTER}" --config=kind.yaml --wait=60s
 
 echo "DEBUG: list clusters"
 kind get clusters
@@ -16,17 +16,16 @@ kind get clusters
 echo "DEBUG: cluster context"
 cat /root/.kube/config
 
-echo "DEBUG: get cluster info"
-kubectl cluster-info --context ${CLUSTER}
-
 echo "DEBUG: get cluster info (kind*)"
 kubectl cluster-info --context kind-${CLUSTER}
 
-echo "DEBUG: get namespaces"
-kubectl get ns --context ${CLUSTER}
-
 echo "DEBUG: get namespaces (kind*)"
 kubectl get ns --context kind-${CLUSTER}
+
+kubectl config set-cluster kind-${CLUSTER} --server=https://docker:6443
+
+echo "DEBUG: get cluster info (kind*)"
+kubectl cluster-info --context kind-${CLUSTER}
 
 # # believe it or not this seems easier than getting .kube/config to work inside distroless ...
 # export IMAGE_TAG="${image_tag}"
