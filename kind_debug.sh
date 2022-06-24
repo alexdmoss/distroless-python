@@ -16,6 +16,8 @@ kind get clusters
 echo "DEBUG: cluster context"
 cat /root/.kube/config
 
+docker ps
+
 echo "DEBUG: get cluster info (kind*)"
 kubectl cluster-info --context kind-${CLUSTER}
 
