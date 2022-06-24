@@ -23,7 +23,7 @@ function test_kubernetes_image() {
 
     CLUSTER=distroless-test-$(( RANDOM%100000 ))
 
-    kind create cluster --name="${CLUSTER}" --config=kind.yaml --wait=60s
+    kind create cluster --name="${CLUSTER}" --config=./tests/kubernetes/kind.yaml --wait=60s
 
     _console_msg "Configure kubectl context when using kind inside gitlab-ci dind ..." INFO
 
