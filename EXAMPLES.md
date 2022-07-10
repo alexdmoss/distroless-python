@@ -33,7 +33,7 @@ Simple FastAPI app. As for the Flask/Gunicorn exampel above, note the use of `ru
 
 This example uses `pipenv` instead of `poetry` to show how that can be handled in a relatively straight-forward way.
 
-We are also using the `mosstech/python-builder` docker image as the base instead of `python:slim-bullseye` - in practice this just saves us needing to bother installing `pipenv` really.
+We are also using the `al3xos/python-builder` docker image as the base instead of `python:slim-bullseye` - in practice this just saves us needing to bother installing `pipenv` really.
 
 ---
 

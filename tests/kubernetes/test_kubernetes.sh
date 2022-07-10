@@ -12,7 +12,7 @@ function test_kubernetes_image() {
     local assertion=$2
 
     if [[ ${CI_SERVER:-} == "yes" ]]; then
-        echo "${DOCKER_CREDS}" | docker login --username mosstech --password-stdin
+        echo "${DOCKER_CREDENTIALS}" | docker login --username al3xos --password-stdin
         _console_msg "Installing Kind ..." INFO
         curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.14.0/kind-linux-amd64
         chmod +x ./kind

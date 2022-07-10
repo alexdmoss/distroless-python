@@ -23,9 +23,9 @@ fi
 
 # use the C (glibc) distroless - required by common packages like grpcio + numpy
 GOOGLE_DISTROLESS_BASE_IMAGE=gcr.io/distroless/cc
-PYTHON_BUILDER_IMAGE=mosstech/python-builder${ARCH}:${PYTHON_VERSION}-${OS_VERSION}
-PYTHON_DISTROLESS_IMAGE=mosstech/python-distroless${ARCH}:${PYTHON_VERSION}-${OS_VERSION}
-TEST_IMAGE_BASE=mosstech/python-distroless-tests
+PYTHON_BUILDER_IMAGE=al3xos/python-builder${ARCH}:${PYTHON_VERSION}-${OS_VERSION}
+PYTHON_DISTROLESS_IMAGE=al3xos/python-distroless${ARCH}:${PYTHON_VERSION}-${OS_VERSION}
+TEST_IMAGE_BASE=al3xos/python-distroless-tests
 
 
 if [[ $(echo "${@:-}" | grep -c -- '--debug') -gt 0 ]]; then

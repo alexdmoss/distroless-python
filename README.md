@@ -15,13 +15,13 @@ Usage examples can be found in the [`tests/`](tests/) directory. These are also 
 In general, you're going to want this:
 
 ```dockerfile
-FROM mosstech/python-distroless:3.9-debian11
+FROM al3xos/python-distroless:3.9-debian11
 ```
 
 A debug image also exists:
 
 ```sh
-docker run --rm -it --entrypoint=sh mosstech/python-distroless:3.9-debian11-debug
+docker run --rm -it --entrypoint=sh al3xos/python-distroless:3.9-debian11-debug
 ```
 
 There are variants for Python 3.9 and Python 3.10, both based on Debian 11. They are built from the `python:3.x-slim-bullseye` image base.
@@ -35,7 +35,7 @@ For convenience, the `builder` image used to create the above is also published.
 To use it:
 
 ```dockerfile
-FROM mosstech/python-builder:3.9-debian11
+FROM al3xos/python-builder:3.9-debian11
 ```
 
 ---
