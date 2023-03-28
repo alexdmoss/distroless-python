@@ -10,7 +10,7 @@ stages:
 # ---------------------- Variables ---------------------- #
 
 variables:
-  TRIVY_VERSION: "0.29.2"
+  TRIVY_VERSION: "0.38.3"
 
 .python-3.9-debian11:
   variables:
