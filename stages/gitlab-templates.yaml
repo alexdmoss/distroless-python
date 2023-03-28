@@ -4,6 +4,9 @@
   image: mosstech/gcloud-and-docker:424.0.0
   services:
   - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
   before_script:
   - until docker info >/dev/null; do sleep 1; echo "Waiting for docker startup"; done
   - echo "${DOCKER_CREDENTIALS}" | docker login --username al3xos --password-stdin
@@ -14,6 +17,9 @@
   image: mosstech/gcloud-and-docker:424.0.0
   services:
   - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
   before_script:
   - until docker info >/dev/null; do sleep 1; echo "Waiting for docker startup"; done
 
