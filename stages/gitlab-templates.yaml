@@ -1,21 +1,21 @@
 # ---------------------- Templates ---------------------- #
 
 .build:
-  image: mosstech/gcloud-and-docker:390.0.0
+  image: mosstech/gcloud-and-docker:424.0.0
   services:
   - docker:dind
   before_script:
-  - sleep 5  # allow time for docker startup
+  - until docker info >/dev/null; do sleep 1; echo "Waiting for docker startup"; done
   - echo "${DOCKER_CREDENTIALS}" | docker login --username al3xos --password-stdin
   after_script:
   - rm -f /root/.docker/config.json
 
 .test:
-  image: mosstech/gcloud-and-docker:390.0.0
+  image: mosstech/gcloud-and-docker:424.0.0
   services:
   - docker:dind
   before_script:
-  - sleep 5  # allow time for docker startup
+  - until docker info >/dev/null; do sleep 1; echo "Waiting for docker startup"; done
 
 # -----------------  Stage Templates -------------------- #
 
