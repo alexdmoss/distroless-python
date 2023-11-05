@@ -17,6 +17,7 @@ function build_test_image() {
 
     docker build \
         --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
+        --build-arg DEBIAN_NAME="${DEBIAN_NAME}" \
         --build-arg PYTHON_BUILDER_IMAGE="${PYTHON_BUILDER_IMAGE}" \
         --build-arg PYTHON_DISTROLESS_IMAGE="${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}" \
         -t "${image_tag}" .
@@ -66,7 +67,7 @@ function test_docker_http() {
     fi
 
     docker rm -f distroless-test >/dev/null 2>&1 || true
-    docker run --rm --detach --name=distroless-test -p 5000:5000 "${image_tag}"
+    docker run --rm --detach --name=distroless-test -p 127.0.0.1:5000:5000/tcp "${image_tag}"
     sleep 5     # CI needs a bit of time ... yawn
 
     output=$(curl -iks http://${HOSTNAME}:5000/)

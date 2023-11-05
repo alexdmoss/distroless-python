@@ -37,20 +37,20 @@ subjects:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}
+  name: distroless-python-test-${PYTHON_MINOR}-${OS_VERSION}
   namespace: default
   labels:
-    app: distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}
+    app: distroless-python-test-${PYTHON_MINOR}-${OS_VERSION}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}
+      app: distroless-python-test-${PYTHON_MINOR}-${OS_VERSION}
   minReadySeconds: 10
   template:
     metadata:
       labels:
-        app: distroless-python-test-${PYTHON_VERSION}-${OS_VERSION}
+        app: distroless-python-test-${PYTHON_MINOR}-${OS_VERSION}
     spec:
       serviceAccount: distroless-python-test
       restartPolicy: Always
@@ -61,7 +61,7 @@ spec:
       containers:
         - name: distroless-python-test
           image: ${IMAGE_TAG}
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           resources:
             requests:
               memory: 100Mi

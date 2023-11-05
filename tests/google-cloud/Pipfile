@@ -9,6 +9,7 @@ verify_ssl = true
 google-cloud-pubsub = "*"
 google-api-core = "*"
 google-auth = "*"
+setuptools = "*"
 
 [requires]
 python_version = "3"
