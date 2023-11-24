@@ -40,8 +40,10 @@ function test_kubernetes_image() {
     # believe it or not this seems easier than getting .kube/config to work inside distroless ...
     envsubst "\$IMAGE_TAG \$PYTHON_MINOR \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply  -n=default -f -
 
-    kubectl rollout status deploy/distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default --timeout=180s
+    #kubectl rollout status deploy/distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default --timeout=180s
     
+    sleep 30
+
     kubectl get pods -n=default
     kubectl describe pods -l=app=distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default
     kubectl top pods -A

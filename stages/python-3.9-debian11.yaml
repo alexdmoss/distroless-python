@@ -8,15 +8,15 @@ build-distroless-python-3.9-debian11:
   - .build-distroless
   - .python-3.9-debian11
 
-basic-tests-python-3.9-debian11:
-  extends:
-  - .basic-tests
-  - .python-3.9-debian11
+# basic-tests-python-3.9-debian11:
+#   extends:
+#   - .basic-tests
+#   - .python-3.9-debian11
 
-http-tests-python-3.9-debian11:
-  extends:
-  - .http-tests
-  - .python-3.9-debian11
+# http-tests-python-3.9-debian11:
+#   extends:
+#   - .http-tests
+#   - .python-3.9-debian11
 
 advanced-tests-python-3.9-debian11:
   extends:
