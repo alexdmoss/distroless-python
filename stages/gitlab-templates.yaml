@@ -62,8 +62,8 @@
   extends:
   - .test
   script:
-  # - ./scripts/tests.sh --target pandas
-  # - ./scripts/tests.sh --target google-cloud
+  - ./scripts/tests.sh --target pandas
+  - ./scripts/tests.sh --target google-cloud
   - ./scripts/tests.sh --target kubernetes
 
 .scan:
