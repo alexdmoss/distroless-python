@@ -14,7 +14,7 @@ RUN pip --quiet --no-cache-dir install --upgrade pip && \
     poetry config virtualenvs.create false && \
     python -m venv ${VIRTUAL_ENV} && \
     . ${VIRTUAL_ENV}/bin/activate && \
-    poetry install --no-dev
+    poetry install --no-root --only-main
 
 # ------------------------------------------------------------------
 
