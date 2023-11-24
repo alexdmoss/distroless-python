@@ -23,7 +23,7 @@ FROM ${PYTHON_DISTROLESS_IMAGE}
 ARG VIRTUAL_ENV=/home/venv
 
 WORKDIR /app
-COPY --chown=1000:1000 *.py .
+COPY --chown=1000:1000 *.py /app/
 COPY --chown=1000:1000 --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 ENTRYPOINT ["/home/venv/bin/python", "run.py", "-b", "0.0.0.0:5000", "app:app"]
