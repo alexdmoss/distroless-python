@@ -41,6 +41,6 @@ variables:
 include:
 - local: "stages/gitlab-templates.yaml"
 - local: "stages/python-3.9-debian11.yaml"
-- local: "stages/python-3.10-debian11.yaml"
-- local: "stages/python-3.11-debian12.yaml"
-- local: "stages/python-3.12-debian12.yaml"
+# - local: "stages/python-3.10-debian11.yaml"
+# - local: "stages/python-3.11-debian12.yaml"
+# - local: "stages/python-3.12-debian12.yaml"
