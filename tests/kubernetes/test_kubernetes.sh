@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -ouE pipefail
+set -eouE pipefail
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     echo "-> [ERROR] This script should be sourced, not run directly"

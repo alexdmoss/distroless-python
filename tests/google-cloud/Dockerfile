@@ -16,6 +16,7 @@ WORKDIR /app
 COPY --chown=1000:1000 . .
 COPY --chown=1000:1000 --from=builder /home/monty/.venv /home/monty/.venv
 
+ENV PYTHONPATH=/home/monty/.venv/lib/python${PYTHON_VERSION}/site-packages
 ENV WEB_CONCURRENCY=1
 
-ENTRYPOINT [ "/home/monty/.venv/bin/python", "main.py" ]
+ENTRYPOINT [ "python", "main.py" ]
