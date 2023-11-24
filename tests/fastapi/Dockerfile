@@ -14,8 +14,9 @@ FROM ${PYTHON_DISTROLESS_IMAGE}
 ARG PYTHON_VERSION
 
 WORKDIR /app
-COPY --chown=1000:1000 *.py .
+COPY --chown=1000:1000 *.py /app/
 COPY --chown=1000:1000 --from=builder /home/monty/.venv /home/monty/.venv
 ENV WEB_CONCURRENCY=1
 
-ENTRYPOINT ["/home/monty/.venv/bin/python", "run.py"]
+ENV PYTHONPATH=/home/monty/.venv/lib/python${PYTHON_VERSION}/site-packages
+ENTRYPOINT ["python", "run.py"]
