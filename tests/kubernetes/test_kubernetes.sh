@@ -19,35 +19,28 @@ function test_kubernetes_image() {
         mv ./kind /usr/local/bin/kind
     fi
 
-    export IMAGE_TAG="${image_tag}"
-    docker push "${IMAGE_TAG}"
-
     # using kind helps us minimise our dependencies on another cluster existing somewhere
     _console_msg "Creating Kind cluster ..." INFO
 
     CLUSTER=distroless-test-"${CI_PIPELINE_ID}"
-
     kind create cluster --name="${CLUSTER}" --config=./tests/kubernetes/kind.yaml --wait=60s
-
-    _console_msg "Configure kubectl context when using kind inside gitlab-ci dind ..." INFO
-
     if [[ ${CI_SERVER:-} == "yes" ]]; then
+        _console_msg "Configure kubectl context when using kind inside gitlab-ci dind ..." INFO
         kubectl config set-cluster kind-"${CLUSTER}" --server=https://docker:6443 --insecure-skip-tls-verify=true
         kubectl config use-context kind-"${CLUSTER}"
     fi
     kubectl cluster-info
 
-    # believe it or not this seems easier than getting .kube/config to work inside distroless ...
+    _console_msg "Loading image into kind for deployment ..." INFO
+
+    export IMAGE_TAG="${image_tag}"
+    kind load docker-image "${IMAGE_TAG}" --name="${CLUSTER}"
+
+    _console_msg "Deploying into kind cluster ..." INFO
+
     envsubst "\$IMAGE_TAG \$PYTHON_MINOR \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply  -n=default -f -
-
-    #kubectl rollout status deploy/distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default --timeout=180s
-    
-    sleep 30
-
+    kubectl rollout status deploy/distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default --timeout=180s
     kubectl get pods -n=default
-    kubectl describe pods -l=app=distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default
-    kubectl top pods -A
-    kubectl top nodes -A
     sleep 10
 
     output=$(kubectl logs -l=app=distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default)

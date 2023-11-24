@@ -61,7 +61,7 @@ spec:
       containers:
         - name: distroless-python-test
           image: ${IMAGE_TAG}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Never
           resources:
             requests:
               memory: 100Mi

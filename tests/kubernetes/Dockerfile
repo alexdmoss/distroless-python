@@ -11,6 +11,7 @@ RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 # ------------------------------------------------------------------
 
 FROM ${PYTHON_DISTROLESS_IMAGE}
+ARG PYTHON_VERSION
 
 WORKDIR /app
 COPY --chown=1000:1000 *.py .
