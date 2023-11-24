@@ -16,8 +16,8 @@ ARG CHIPSET_ARCH=x86_64-linux-gnu
 
 # this carries more risk than installing it fully, but makes the image a lot smaller
 COPY --from=python-base /usr/local/lib/ /usr/local/lib/
-COPY --from=python-base /usr/local/bin/python /usr/local/bin/python
-COPY --from=python-base /etc/ld.so.cache /etc/ld.so.cache
+COPY --from=python-base /usr/local/bin/python /usr/local/bin/
+COPY --from=python-base /etc/ld.so.cache /etc/
 
 ## -------------------------- add common compiled libraries --------------------------- ##
 
@@ -31,18 +31,16 @@ COPY --from=python-base /lib/${CHIPSET_ARCH}/libexpat* /lib/${CHIPSET_ARCH}/
 
 ## -------------------------------- non-root user setup ------------------------------- ##
 
-COPY --from=python-base /bin/echo /bin/echo
-COPY --from=python-base /bin/rm /bin/rm
-COPY --from=python-base /bin/sh /bin/sh
-
-RUN echo "monty:x:1000:monty" >> /etc/group
-RUN echo "monty:x:1001:" >> /etc/group
-RUN echo "monty:x:1000:1001::/home/monty:" >> /etc/passwd
+COPY --from=python-base /bin/echo /bin/ln /bin/rm /bin/sh /bin/
 
 # quick validation that python still works whilst we have a shell
-RUN python --version
-
-RUN rm /bin/sh /bin/echo /bin/rm
+# pipenv links python to python3 in venv
+RUN echo "monty:x:1000:monty" >> /etc/group \
+ && echo "monty:x:1001:" >> /etc/group \
+ && echo "monty:x:1000:1001::/home/monty:" >> /etc/passwd \
+ && python --version \
+ && ln -s /usr/local/bin/python /usr/local/bin/python3 \
+ && rm /bin/echo /bin/ln /bin/rm /bin/sh
 
 ## --------------------------- standardise execution env ----------------------------- ##
 

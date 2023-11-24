@@ -15,14 +15,16 @@ Usage examples can be found in the [`tests/`](tests/) directory. These are also 
 In general, you're going to want this:
 
 ```dockerfile
-FROM al3xos/python-distroless:3.9-debian11
+FROM al3xos/python-distroless:3.12-debian12
 ```
 
 A debug image also exists:
 
 ```sh
-docker run --rm -it --entrypoint=sh al3xos/python-distroless:3.9-debian11-debug
+docker run --rm -it --entrypoint=sh al3xos/python-distroless:3.12-debian12-debug
 ```
+
+There are variants for Python 3.11 and Python 3.12, both based on Debian 12. They are built from the `python:3.x-slim-bookworm` image base.
 
 There are variants for Python 3.9 and Python 3.10, both based on Debian 11. They are built from the `python:3.x-slim-bullseye` image base.
 
@@ -30,12 +32,12 @@ There are variants for Python 3.9 and Python 3.10, both based on Debian 11. They
 
 ### python/builder
 
-For convenience, the `builder` image used to create the above is also published. This is **not** in general going to be useful in running python apps, but can be a convenient way to get a top layer that is `python:3.9-slim-bullseye` but with a non-root user and virtualenv/pipenv/poetry pre-installed - fewer stuff for you to sort in your Dockerfile!
+For convenience, the `builder` image used to create the above is also published. This is **not** in general going to be useful in running python apps, but can be a convenient way to get a top layer that is `python:3.12-slim-bookworm` but with a non-root user and virtualenv/pipenv/poetry pre-installed - fewer stuff for you to sort in your Dockerfile!
 
 To use it:
 
 ```dockerfile
-FROM al3xos/python-builder:3.9-debian11
+FROM al3xos/python-builder:3.12-debian12
 ```
 
 ---

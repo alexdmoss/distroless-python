@@ -11,6 +11,7 @@ docker pull "${PYTHON_BUILDER_IMAGE}" || true
 
 docker build \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
+    --build-arg DEBIAN_NAME="${DEBIAN_NAME}" \
     -t "${PYTHON_BUILDER_IMAGE}" \
     -f builder.Dockerfile .
 

@@ -22,9 +22,11 @@ if [[ -z ${OS_VERSION:-} ]]; then
 fi
 
 # use the C (glibc) distroless - required by common packages like grpcio + numpy
-GOOGLE_DISTROLESS_BASE_IMAGE=gcr.io/distroless/cc
-PYTHON_BUILDER_IMAGE=al3xos/python-builder${ARCH}:${PYTHON_VERSION}-${OS_VERSION}
-PYTHON_DISTROLESS_IMAGE=al3xos/python-distroless${ARCH}:${PYTHON_VERSION}-${OS_VERSION}
+GOOGLE_DISTROLESS_BASE_IMAGE=gcr.io/distroless/cc-${OS_VERSION}
+# Cut patch version from semver Python version for streamlined image tags: 3.12.0 -> 3.12
+PYTHON_MINOR=$(echo $PYTHON_VERSION | sed -e "s#^\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)#\1.\2#")
+PYTHON_BUILDER_IMAGE=al3xos/python-builder${ARCH}:${PYTHON_MINOR}-${OS_VERSION}
+PYTHON_DISTROLESS_IMAGE=al3xos/python-distroless${ARCH}:${PYTHON_MINOR}-${OS_VERSION}
 TEST_IMAGE_BASE=al3xos/python-distroless-tests
 
 
@@ -39,6 +41,7 @@ fi
 
 
 export PYTHON_VERSION
+export PYTHON_MINOR
 export OS_VERSION
 export ARCH
 export PYTHON_BUILDER_IMAGE

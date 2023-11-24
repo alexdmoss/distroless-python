@@ -20,7 +20,7 @@ ${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}
 for image in ${IMAGES}; do
     echo; echo "-> Trivy scan for image: ${image}"; echo
     trivy image --clear-cache
-    trivy image --exit-code 1 --severity CRITICAL,HIGH --no-progress "${image}"
+    trivy image --exit-code 1 --scanners vuln --severity CRITICAL,HIGH --no-progress "${image}"
 done
 
 popd > /dev/null || exit

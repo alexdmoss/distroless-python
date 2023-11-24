@@ -14,7 +14,7 @@ function test_kubernetes_image() {
     if [[ ${CI_SERVER:-} == "yes" ]]; then
         echo "${DOCKER_CREDS}" | docker login --username al3xos --password-stdin
         _console_msg "Installing Kind ..." INFO
-        curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.14.0/kind-linux-amd64
+        curl -sLo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
         chmod +x ./kind
         mv ./kind /usr/local/bin/kind
     fi
@@ -38,17 +38,17 @@ function test_kubernetes_image() {
     kubectl cluster-info
 
     # believe it or not this seems easier than getting .kube/config to work inside distroless ...
-    envsubst "\$IMAGE_TAG \$PYTHON_VERSION \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply  -n=default -f -
+    envsubst "\$IMAGE_TAG \$PYTHON_MINOR \$OS_VERSION" < ./tests/kubernetes/k8s.yaml | kubectl apply  -n=default -f -
 
-    kubectl rollout status deploy/distroless-python-test-"${PYTHON_VERSION}"-"${OS_VERSION}" -n=default --timeout=180s
+    kubectl rollout status deploy/distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default --timeout=180s
     
     kubectl get pods -n=default
-    kubectl describe pods -l=app=distroless-python-test-"${PYTHON_VERSION}"-"${OS_VERSION}" -n=default
+    kubectl describe pods -l=app=distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default
     kubectl top pods -A
     kubectl top nodes -A
     sleep 10
 
-    output=$(kubectl logs -l=app=distroless-python-test-"${PYTHON_VERSION}"-"${OS_VERSION}" -n=default)
+    output=$(kubectl logs -l=app=distroless-python-test-"${PYTHON_MINOR}"-"${OS_VERSION}" -n=default)
 
     if [[ $(echo "${output}" | grep -c "${assertion}") -eq 0 ]]; then
         _console_msg "Test failed: [${output}] did not contain [${assertion}]" ERROR

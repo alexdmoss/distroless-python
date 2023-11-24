@@ -1,0 +1,4 @@
+.dockerignore
+*.md
+*.sh
+*Dockerfile

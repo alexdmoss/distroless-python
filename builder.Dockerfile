@@ -1,15 +1,16 @@
 ARG PYTHON_VERSION
+ARG DEBIAN_NAME
 
 # several optimisations in python-slim images already, benefit from these
-FROM python:${PYTHON_VERSION}-slim-bullseye
+FROM python:${PYTHON_VERSION}-slim-${DEBIAN_NAME}
 
 # ------------ setup standard non-root user for use downstream --------------  #
 
 ARG NONROOT_USER="monty"
 ARG NONROOT_GROUP="monty"
 
-RUN groupadd ${NONROOT_GROUP}
-RUN useradd -m ${NONROOT_USER} -g ${NONROOT_GROUP}
+RUN groupadd ${NONROOT_GROUP} \
+ && useradd -m ${NONROOT_USER} -g ${NONROOT_GROUP}
 
 USER ${NONROOT_USER}
 
