@@ -72,6 +72,7 @@ function test_docker_http() {
 
     echo "---------------------- DEBUG START ----------------------"
     docker ps
+    docker logs distroless-test
     curl -iks http://docker:5000/
     curl -iks http://localhost:5000/
     echo "---------------------- DEBUG END ----------------------"
@@ -84,11 +85,14 @@ function test_docker_http() {
 
     echo "---------------------- DEBUG START ----------------------"
     docker ps
+    docker logs distroless-test
     curl -iks http://docker:5000/
     curl -iks http://localhost:5000/
     echo "---------------------- DEBUG END ----------------------"
 
     output=$(curl -iks http://${HOSTNAME}:5000/)
+
+    docker run --rm --name=distroless-test -p 5000:5000 "${image_tag}"
 
     if [[ $(echo "${output}" | grep -c "${assertion}") -eq 0 ]]; then
         _console_msg "Test failed: [$assertion] not found in output [$output]" ERROR
