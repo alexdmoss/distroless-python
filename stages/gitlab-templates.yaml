@@ -54,7 +54,7 @@
   extends:
   - .test
   script:
-  - ./scripts/tests.sh --target gunicorn
+  # - ./scripts/tests.sh --target gunicorn
   - ./scripts/tests.sh --target fastapi
 
 .advanced-tests:

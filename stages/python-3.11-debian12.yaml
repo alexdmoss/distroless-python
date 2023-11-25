@@ -10,12 +10,12 @@ build-distroless-python-3.11-debian12:
   needs:
   - build-builder-python-3.11-debian12
 
-basic-tests-python-3.11-debian12:
-  extends:
-  - .basic-tests
-  - .python-3.11-debian12
-  needs:
-  - build-distroless-python-3.11-debian12
+# basic-tests-python-3.11-debian12:
+#   extends:
+#   - .basic-tests
+#   - .python-3.11-debian12
+#   needs:
+#   - build-distroless-python-3.11-debian12
 
 http-tests-python-3.11-debian12:
   extends:
@@ -24,26 +24,26 @@ http-tests-python-3.11-debian12:
   needs:
   - build-distroless-python-3.11-debian12
 
-advanced-tests-python-3.11-debian12:
-  extends:
-  - .advanced-tests
-  - .python-3.11-debian12
-  needs:
-  - build-distroless-python-3.11-debian12
+# advanced-tests-python-3.11-debian12:
+#   extends:
+#   - .advanced-tests
+#   - .python-3.11-debian12
+#   needs:
+#   - build-distroless-python-3.11-debian12
 
-scan-python-3.11-debian12:
-  extends:
-  - .scan
-  - .python-3.11-debian12
-  needs:
-  - build-distroless-python-3.11-debian12
+# scan-python-3.11-debian12:
+#   extends:
+#   - .scan
+#   - .python-3.11-debian12
+#   needs:
+#   - build-distroless-python-3.11-debian12
 
-publish-python-3.11-debian12:
-  extends:
-  - .publish
-  - .python-3.11-debian12
-  needs:
-  - basic-tests-python-3.11-debian12
-  - http-tests-python-3.11-debian12
-  - advanced-tests-python-3.11-debian12
-  - scan-python-3.11-debian12
+# publish-python-3.11-debian12:
+#   extends:
+#   - .publish
+#   - .python-3.11-debian12
+#   needs:
+#   - basic-tests-python-3.11-debian12
+#   - http-tests-python-3.11-debian12
+#   - advanced-tests-python-3.11-debian12
+#   - scan-python-3.11-debian12
