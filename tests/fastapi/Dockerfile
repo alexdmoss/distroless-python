@@ -19,4 +19,4 @@ COPY --chown=1000:1000 --from=builder /home/monty/.venv /home/monty/.venv
 ENV WEB_CONCURRENCY=1
 
 ENV PYTHONPATH=/home/monty/.venv/lib/python${PYTHON_VERSION}/site-packages
-ENTRYPOINT ["python", "run.py"]
+CMD ["run.py"]
