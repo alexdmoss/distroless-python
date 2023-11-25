@@ -42,6 +42,12 @@ FROM al3xos/python-builder:3.12-debian12
 
 ---
 
+## Available Versions
+
+This repo now only publishes Python 3.11 & 3.12 images based on Debian 12 (bookworm). Maintaining the tests for Bullseye was getting troublesome - those variants (with Python 3.9 and 3.10 respectively) were last published on 24/11/2023, and will be missing important security fixes from that date.
+
+---
+
 ## Upgrading
 
 Python and OS version are set in `.gitlab-ci.yml`. This repo originates at [https://gitlab.com/alexos-dev/distroless-python](https://gitlab.com/alexos-dev/distroless-python) but is mirrored to Github [https://github.com/alexdmoss/distroless-python](https://github.com/alexdmoss/distroless-python) for convenience in sharing. Perhaps I'll convert to use Github actions at some point 🤷‍♂️

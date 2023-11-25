@@ -17,6 +17,4 @@ WORKDIR /app
 COPY --chown=1000:1000 *.py .
 COPY --chown=1000:1000 --from=builder /.venv /.venv
 
-ENV PYTHONPATH=/.venv/lib/python${PYTHON_VERSION}/site-packages
-
-ENTRYPOINT [ "python", "app.py", "--namespace", "default" ]
+ENTRYPOINT [ "/.venv/bin/python", "app.py", "--namespace", "default" ]

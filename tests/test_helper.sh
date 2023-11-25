@@ -70,29 +70,15 @@ function test_docker_http() {
     docker run --rm --detach --name=distroless-test -p 5000:5000 "${image_tag}"
     sleep 5     # CI needs a bit of time ... yawn
 
-    echo "---------------------- DEBUG START ----------------------"
-    docker ps
-    docker logs distroless-test
-    curl -iks http://docker:5000/
-    curl -iks http://localhost:5000/
-    echo "---------------------- DEBUG END ----------------------"
+    echo "---------------------- STARTUP LOGS ----------------------"
+    if [[ $(docker ps | grep -c distroless-test) -gt 0 ]]; then
+        docker logs distroless-test
+    else
+        docker run --rm --name=distroless-test -p 5000:5000 "${image_tag}"
+    fi
+    echo "---------------------- STARTUP LOGS ----------------------"
 
     output=$(curl -iks http://${HOSTNAME}:5000/)
-
-    docker rm -f distroless-test >/dev/null 2>&1 || true
-    docker run --rm --detach --name=distroless-test -p 127.0.0.1:5000:5000/tcp "${image_tag}"
-    sleep 5     # CI needs a bit of time ... yawn
-
-    echo "---------------------- DEBUG START ----------------------"
-    docker ps
-    docker logs distroless-test
-    curl -iks http://docker:5000/
-    curl -iks http://localhost:5000/
-    echo "---------------------- DEBUG END ----------------------"
-
-    output=$(curl -iks http://${HOSTNAME}:5000/)
-
-    docker run --rm --name=distroless-test -p 5000:5000 "${image_tag}"
 
     if [[ $(echo "${output}" | grep -c "${assertion}") -eq 0 ]]; then
         _console_msg "Test failed: [$assertion] not found in output [$output]" ERROR
@@ -113,22 +99,22 @@ function test_docker_http() {
 
 function _console_msg() {
 
-  local msg=${1}
-  local level=${2:-}
-  local ts=${3:-}
+    local msg=${1}
+    local level=${2:-}
+    local ts=${3:-}
 
-  if [[ -z ${level} ]]; then level=INFO; fi
-  if [[ -n ${ts} ]]; then ts=" [$(date +"%Y-%m-%d %H:%M")]"; fi
+    if [[ -z ${level} ]]; then level=INFO; fi
+    if [[ -n ${ts} ]]; then ts=" [$(date +"%Y-%m-%d %H:%M")]"; fi
 
-  echo ""
+    echo ""
 
-  if [[ ${level} == "ERROR" ]] || [[ ${level} == "CRIT" ]] || [[ ${level} == "FATAL" ]]; then
-    (echo 2>&1)
-    (echo >&2 "-> [${level}]${ts} ${msg}")
-  else
-    (echo "-> [${level}]${ts} ${msg}")
-  fi
+    if [[ ${level} == "ERROR" ]] || [[ ${level} == "CRIT" ]] || [[ ${level} == "FATAL" ]]; then
+        (echo 2>&1)
+        (echo >&2 "-> [${level}]${ts} ${msg}")
+    else
+        (echo "-> [${level}]${ts} ${msg}")
+    fi
 
-  echo ""
+    echo ""
 
 }
