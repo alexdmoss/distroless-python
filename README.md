@@ -69,3 +69,9 @@ Following issues copying the Bazel-based approach used by [Google's distroless r
 ### A Note on M1 / Apple Silicon
 
 The scripts can be used locally to build an `-arm64` variant, but the CI will currently only build the x86_64 version. I haven't yet looked into options to deal with this yet.
+
+---
+
+## License
+
+These images are based on Google's distroless images, which are distributed under the Apache-2.0 license. This repo therefore uses the same.
