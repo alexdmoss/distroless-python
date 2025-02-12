@@ -10,7 +10,17 @@ FROM ${PYTHON_BUILDER_IMAGE} as python-base
 # build from distroless C or cc:debug, because lots of Python depends on C
 FROM ${GOOGLE_DISTROLESS_BASE_IMAGE}
 
-ARG CHIPSET_ARCH=x86_64-linux-gnu
+## -------------------------------- non-root user setup ------------------------------- ##
+
+COPY --from=python-base /bin/echo /bin/ln /bin/rm /bin/sh /bin/
+
+# quick validation that python still works whilst we have a shell
+# pipenv links python to python3 in venv
+RUN echo "monty:x:1000:monty" >> /etc/group \
+    && echo "monty:x:1001:" >> /etc/group \
+    && echo "monty:x:1000:1001::/home/monty:" >> /etc/passwd \
+    && python --version \
+    && ln -s /usr/local/bin/python /usr/local/bin/python3
 
 ## ------------------------- copy python itself from builder -------------------------- ##
 
@@ -21,26 +31,28 @@ COPY --from=python-base /etc/ld.so.cache /etc/
 
 ## -------------------------- add common compiled libraries --------------------------- ##
 
+# This is ugly but haven't come up with a better way yet.
+# We attempt to copy for both architectures because we are now using buildx and TARGETARCH
+# won't let us work out these paths.
+# The hello file is there so that the COPY doesn't fail
+RUN touch /tmp/hello
+
 # If seeing ImportErrors, check if in the python-base already and copy as below
+# - libffi + libexpat are required by google-cloud/grpcio
+# - libz.so is required by lots of packages - e.g. six, numpy, wsgi
 
-# required by lots of packages - e.g. six, numpy, wsgi
-COPY --from=python-base /lib/${CHIPSET_ARCH}/libz.so.1 /lib/${CHIPSET_ARCH}/
-# required by google-cloud/grpcio
-COPY --from=python-base /usr/lib/${CHIPSET_ARCH}/libffi* /usr/lib/${CHIPSET_ARCH}/
-COPY --from=python-base /lib/${CHIPSET_ARCH}/libexpat* /lib/${CHIPSET_ARCH}/
+# for amd64 arch
+COPY --from=python-base /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/
+COPY --from=python-base /usr/lib/x86_64-linux-gnu/libffi* /usr/lib/x86_64-linux-gnu/
+COPY --from=python-base /lib/x86_64-linux-gnu/libexpat* /lib/x86_64-linux-gnu/
 
-## -------------------------------- non-root user setup ------------------------------- ##
+# for arm64 arch
+COPY --from=python-base /lib/aarch64-linux-gnu/libz.so.1 /lib/aarch64-linux-gnu/
+COPY --from=python-base /usr/lib/aarch64-linux-gnu/libffi* /usr/lib/aarch64-linux-gnu/
+COPY --from=python-base /lib/aarch64-linux-gnu/libexpat* /lib/aarch64-linux-gnu/
 
-COPY --from=python-base /bin/echo /bin/ln /bin/rm /bin/sh /bin/
-
-# quick validation that python still works whilst we have a shell
-# pipenv links python to python3 in venv
-RUN echo "monty:x:1000:monty" >> /etc/group \
- && echo "monty:x:1001:" >> /etc/group \
- && echo "monty:x:1000:1001::/home/monty:" >> /etc/passwd \
- && python --version \
- && ln -s /usr/local/bin/python /usr/local/bin/python3 \
- && rm /bin/echo /bin/ln /bin/rm /bin/sh
+# clear out our temporary shell now done with it
+RUN rm /bin/echo /bin/ln /bin/rm /bin/sh
 
 ## --------------------------- standardise execution env ----------------------------- ##
 
