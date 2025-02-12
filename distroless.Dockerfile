@@ -42,14 +42,14 @@ RUN touch /tmp/hello
 # - libz.so is required by lots of packages - e.g. six, numpy, wsgi
 
 # for amd64 arch
-COPY --from=python-base /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/
-COPY --from=python-base /usr/lib/x86_64-linux-gnu/libffi* /usr/lib/x86_64-linux-gnu/
-COPY --from=python-base /lib/x86_64-linux-gnu/libexpat* /lib/x86_64-linux-gnu/
+COPY --from=python-base /tmp/hello /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/
+COPY --from=python-base /tmp/hello /usr/lib/x86_64-linux-gnu/libffi* /usr/lib/x86_64-linux-gnu/
+COPY --from=python-base /tmp/hello /lib/x86_64-linux-gnu/libexpat* /lib/x86_64-linux-gnu/
 
 # for arm64 arch
-COPY --from=python-base /lib/aarch64-linux-gnu/libz.so.1 /lib/aarch64-linux-gnu/
-COPY --from=python-base /usr/lib/aarch64-linux-gnu/libffi* /usr/lib/aarch64-linux-gnu/
-COPY --from=python-base /lib/aarch64-linux-gnu/libexpat* /lib/aarch64-linux-gnu/
+COPY --from=python-base /tmp/hello /lib/aarch64-linux-gnu/libz.so.1 /lib/aarch64-linux-gnu/
+COPY --from=python-base /tmp/hello /usr/lib/aarch64-linux-gnu/libffi* /usr/lib/aarch64-linux-gnu/
+COPY --from=python-base /tmp/hello /lib/aarch64-linux-gnu/libexpat* /lib/aarch64-linux-gnu/
 
 # clear out our temporary shell now done with it
 RUN rm /bin/echo /bin/ln /bin/rm /bin/sh
