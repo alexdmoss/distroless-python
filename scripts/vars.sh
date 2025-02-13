@@ -15,10 +15,11 @@ if [[ -z ${OS_VERSION:-} ]]; then
     exit 1
 fi
 
+git name-rev --name-only HEAD
 current_branch=$(git name-rev --name-only HEAD)
 RC=""
 if [[ $current_branch != "main" ]]; then
-    RC="-rc-${current_branch}"
+    RC="-rc"
 fi
 
 # use the C (glibc) distroless - required by common packages like grpcio + numpy
