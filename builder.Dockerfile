@@ -1,5 +1,5 @@
-ARG PYTHON_VERSION
-ARG DEBIAN_NAME
+ARG PYTHON_VERSION="3.11.11"
+ARG DEBIAN_NAME="bookworm"
 
 # several optimisations in python-slim images already, benefit from these
 FROM python:${PYTHON_VERSION}-slim-${DEBIAN_NAME}
@@ -21,10 +21,10 @@ ENV PATH="/home/${NONROOT_USER}/.local/bin:${PATH}"
 USER ${NONROOT_USER}
 WORKDIR /home/${NONROOT_USER}
 
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONFAULTHANDLER 1
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONFAULTHANDLER=1
 
 # ------------- pipenv/poetry for use elsewhere as builder image ------------  #
 

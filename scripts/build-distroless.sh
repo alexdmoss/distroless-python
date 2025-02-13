@@ -7,7 +7,7 @@ pushd "$(dirname "${BASH_SOURCE[0]}")/../" >/dev/null || exit
 # shellcheck disable=SC1091
 . ./scripts/vars.sh
 
-docker buildx create --name multiarch-builder --use --bootstrap --driver docker-container --platform linux/amd64,linux/arm64
+docker buildx create --name multiarch-builder --use --bootstrap --driver docker-container --platform linux/amd64,linux/arm64 || true
 
 docker buildx build \
     --platform linux/amd64,linux/arm64 \

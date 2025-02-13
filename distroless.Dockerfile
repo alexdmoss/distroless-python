@@ -3,7 +3,7 @@ ARG GOOGLE_DISTROLESS_BASE_IMAGE
 
 ## -------------- layer to give access to newer python + its dependencies ------------- ##
 
-FROM ${PYTHON_BUILDER_IMAGE} as python-base
+FROM ${PYTHON_BUILDER_IMAGE} AS python-base
 
 ## ------------------------------- distroless base image ------------------------------ ##
 
@@ -34,22 +34,22 @@ COPY --from=python-base /etc/ld.so.cache /etc/
 # This is ugly but haven't come up with a better way yet.
 # We attempt to copy for both architectures because we are now using buildx and TARGETARCH
 # won't let us work out these paths.
-# The hello file is there so that the COPY doesn't fail
-RUN touch /tmp/hello
+# The /etc/os-release file is there so that the COPY doesn't fail
+
 
 # If seeing ImportErrors, check if in the python-base already and copy as below
 # - libffi + libexpat are required by google-cloud/grpcio
 # - libz.so is required by lots of packages - e.g. six, numpy, wsgi
 
 # for amd64 arch
-COPY --from=python-base /tmp/hello /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/
-COPY --from=python-base /tmp/hello /usr/lib/x86_64-linux-gnu/libffi* /usr/lib/x86_64-linux-gnu/
-COPY --from=python-base /tmp/hello /lib/x86_64-linux-gnu/libexpat* /lib/x86_64-linux-gnu/
+COPY --from=python-base /etc/os-release /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/
+COPY --from=python-base /etc/os-release /usr/lib/x86_64-linux-gnu/libffi* /usr/lib/x86_64-linux-gnu/
+COPY --from=python-base /etc/os-release /lib/x86_64-linux-gnu/libexpat* /lib/x86_64-linux-gnu/
 
 # for arm64 arch
-COPY --from=python-base /tmp/hello /lib/aarch64-linux-gnu/libz.so.1 /lib/aarch64-linux-gnu/
-COPY --from=python-base /tmp/hello /usr/lib/aarch64-linux-gnu/libffi* /usr/lib/aarch64-linux-gnu/
-COPY --from=python-base /tmp/hello /lib/aarch64-linux-gnu/libexpat* /lib/aarch64-linux-gnu/
+COPY --from=python-base /etc/os-release /lib/aarch64-linux-gnu/libz.so.1 /lib/aarch64-linux-gnu/
+COPY --from=python-base /etc/os-release /usr/lib/aarch64-linux-gnu/libffi* /usr/lib/aarch64-linux-gnu/
+COPY --from=python-base /etc/os-release /lib/aarch64-linux-gnu/libexpat* /lib/aarch64-linux-gnu/
 
 # clear out our temporary shell now done with it
 RUN rm /bin/echo /bin/ln /bin/rm /bin/sh
@@ -60,9 +60,9 @@ RUN rm /bin/echo /bin/ln /bin/rm /bin/sh
 USER monty
 
 # standardise on locale, don't generate .pyc, enable tracebacks on seg faults
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONFAULTHANDLER 1
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONFAULTHANDLER=1
 
 ENTRYPOINT ["/usr/local/bin/python"]
