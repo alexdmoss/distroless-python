@@ -15,10 +15,7 @@ docker buildx build \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
     --build-arg DEBIAN_NAME="${DEBIAN_NAME}" \
     -t "${PYTHON_BUILDER_IMAGE}" \
-    -f builder.Dockerfile .
-
-if [[ ${CI_SERVER:-} == "yes" ]]; then
-    docker buildx push "${PYTHON_BUILDER_IMAGE}"
-fi
+    -f builder.Dockerfile . \
+    --push
 
 popd > /dev/null || exit

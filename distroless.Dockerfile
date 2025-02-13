@@ -5,10 +5,31 @@ ARG GOOGLE_DISTROLESS_BASE_IMAGE
 
 FROM ${PYTHON_BUILDER_IMAGE} AS python-base
 
+# this script is dealing with the fact that with buildx we can't tell the path to these libs (it's not just TARGETARCH)
+COPY lib_linker.sh /
+RUN /lib_linker.sh
+
 ## ------------------------------- distroless base image ------------------------------ ##
 
 # build from distroless C or cc:debug, because lots of Python depends on C
 FROM ${GOOGLE_DISTROLESS_BASE_IMAGE}
+
+ARG PYTHON_MINOR
+ARG PYTHON_VERSION
+
+## ------------------------- copy python itself from builder -------------------------- ##
+
+# this carries more risk than installing it fully, but makes the image a lot smaller
+COPY --from=python-base /usr/local/lib/ /usr/local/lib/
+COPY --from=python-base /usr/local/bin/python /usr/local/bin/
+COPY --from=python-base /etc/ld.so.cache /etc/
+
+## -------------------------- add common compiled libraries --------------------------- ##
+
+# see lib_linker.sh for how these tmp paths get generated
+COPY --from=python-base /tmp/python-libs/libz.so.1 /lib/x86_64-linux-gnu/
+COPY --from=python-base /tmp/python-libs/libffi* /usr/lib/x86_64-linux-gnu/
+COPY --from=python-base /tmp/python-libs/libexpat* /lib/x86_64-linux-gnu/
 
 ## -------------------------------- non-root user setup ------------------------------- ##
 
@@ -20,36 +41,9 @@ RUN echo "monty:x:1000:monty" >> /etc/group \
     && echo "monty:x:1001:" >> /etc/group \
     && echo "monty:x:1000:1001::/home/monty:" >> /etc/passwd \
     && python --version \
-    && ln -s /usr/local/bin/python /usr/local/bin/python3
-
-## ------------------------- copy python itself from builder -------------------------- ##
-
-# this carries more risk than installing it fully, but makes the image a lot smaller
-COPY --from=python-base /usr/local/lib/ /usr/local/lib/
-COPY --from=python-base /usr/local/bin/python /usr/local/bin/
-COPY --from=python-base /etc/ld.so.cache /etc/
-
-## -------------------------- add common compiled libraries --------------------------- ##
-
-# This is ugly but haven't come up with a better way yet.
-# We attempt to copy for both architectures because we are now using buildx and TARGETARCH
-# won't let us work out these paths.
-# The /etc/os-release file is there so that the COPY doesn't fail
-
-
-# If seeing ImportErrors, check if in the python-base already and copy as below
-# - libffi + libexpat are required by google-cloud/grpcio
-# - libz.so is required by lots of packages - e.g. six, numpy, wsgi
-
-# for amd64 arch
-COPY --from=python-base /etc/os-release /lib/x86_64-linux-gnu/libz.so.1 /lib/x86_64-linux-gnu/
-COPY --from=python-base /etc/os-release /usr/lib/x86_64-linux-gnu/libffi* /usr/lib/x86_64-linux-gnu/
-COPY --from=python-base /etc/os-release /lib/x86_64-linux-gnu/libexpat* /lib/x86_64-linux-gnu/
-
-# for arm64 arch
-COPY --from=python-base /etc/os-release /lib/aarch64-linux-gnu/libz.so.1 /lib/aarch64-linux-gnu/
-COPY --from=python-base /etc/os-release /usr/lib/aarch64-linux-gnu/libffi* /usr/lib/aarch64-linux-gnu/
-COPY --from=python-base /etc/os-release /lib/aarch64-linux-gnu/libexpat* /lib/aarch64-linux-gnu/
+    && ln -s /usr/local/bin/python /usr/local/bin/python3 \
+    && ln -s /usr/local/bin/python /usr/local/bin/python${PYTHON_MINOR} \
+    && ln -s /usr/local/bin/python /usr/local/bin/python${PYTHON_VERSION}
 
 # clear out our temporary shell now done with it
 RUN rm /bin/echo /bin/ln /bin/rm /bin/sh
