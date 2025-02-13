@@ -30,7 +30,7 @@ docker buildx build \
     --build-arg GOOGLE_DISTROLESS_BASE_IMAGE="${GOOGLE_DISTROLESS_BASE_IMAGE}:debug" \
     --build-arg PYTHON_MINOR="${PYTHON_MINOR}" \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
-    -t "${PYTHON_DISTROLESS_IMAGE}-${CI_PIPELINE_ID}-debug${TAG}" \
+    -t "${PYTHON_DISTROLESS_IMAGE}-debug-${CI_PIPELINE_ID}${TAG}" \
     -f distroless.Dockerfile . \
     --push
 
