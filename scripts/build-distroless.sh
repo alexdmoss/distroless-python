@@ -17,6 +17,8 @@ docker build \
     --build-arg PYTHON_BUILDER_IMAGE="${PYTHON_BUILDER_IMAGE}" \
     --build-arg GOOGLE_DISTROLESS_BASE_IMAGE="${GOOGLE_DISTROLESS_BASE_IMAGE}" \
     --build-arg CHIPSET_ARCH="${CHIPSET_ARCH}" \
+    --build-arg PYTHON_MAJOR_VERSION="${PYTHON_MAJOR_VERSION}" \
+    --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
     -t "${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}" \
     -f distroless.Dockerfile .
 
@@ -25,6 +27,8 @@ docker build \
     --build-arg PYTHON_BUILDER_IMAGE="${PYTHON_BUILDER_IMAGE}" \
     --build-arg GOOGLE_DISTROLESS_BASE_IMAGE="${GOOGLE_DISTROLESS_BASE_IMAGE}:debug" \
     --build-arg CHIPSET_ARCH="${CHIPSET_ARCH}" \
+    --build-arg PYTHON_MAJOR_VERSION="${PYTHON_MAJOR_VERSION}" \
+    --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
     -t "${PYTHON_DISTROLESS_IMAGE}-debug-intermediate-${CI_PIPELINE_ID}" \
     -f distroless.Dockerfile .
 

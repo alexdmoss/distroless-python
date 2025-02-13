@@ -11,6 +11,8 @@ FROM ${PYTHON_BUILDER_IMAGE} as python-base
 FROM ${GOOGLE_DISTROLESS_BASE_IMAGE}
 
 ARG CHIPSET_ARCH=x86_64-linux-gnu
+ARG PYTHON_MAJOR_VERSION
+ARG PYTHON_VERSION
 
 ## ------------------------- copy python itself from builder -------------------------- ##
 
@@ -40,6 +42,8 @@ RUN echo "monty:x:1000:monty" >> /etc/group \
  && echo "monty:x:1000:1001::/home/monty:" >> /etc/passwd \
  && python --version \
  && ln -s /usr/local/bin/python /usr/local/bin/python3 \
+ && ln -s /usr/local/bin/python /usr/local/bin/python${PYTHON_MAJOR_VERSION} \
+ && ln -s /usr/local/bin/python /usr/local/bin/python${PYTHON_VERSION} \
  && rm /bin/echo /bin/ln /bin/rm /bin/sh
 
 ## --------------------------- standardise execution env ----------------------------- ##
