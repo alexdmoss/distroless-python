@@ -7,7 +7,7 @@ authors = ["Alex Moss <alex@alexos.dev>"]
 [tool.poetry.dependencies]
 python = ">=3.9"
 Flask = "^3.0.0"
-gunicorn = "^21.0.0"
+gunicorn = "^23.0.0"
 
 [tool.poetry.dev-dependencies]
 
