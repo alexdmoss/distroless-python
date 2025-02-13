@@ -31,7 +31,7 @@ fi
 
 if [[ ${target} == "version" ]] || [[ ${target} == "ALL" ]]; then
     test_run=1
-    test_docker_output "${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}" "Python ${PYTHON_VERSION}" "--version"
+    test_docker_output "${PYTHON_DISTROLESS_IMAGE}-${CI_PIPELINE_ID}-intermediate" "Python ${PYTHON_VERSION}" "--version"
 fi
 
 if [[ ${target} == "hello-world" ]] || [[ ${target} == "ALL" ]]; then
