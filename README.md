@@ -15,36 +15,34 @@ Usage examples can be found in the [`tests/`](tests/) directory. These are also 
 In general, you're going to want this:
 
 ```dockerfile
-FROM al3xos/python-distroless:3.12-debian12
+FROM al3xos/python-distroless:3.13-debian12
 ```
 
 A debug image also exists:
 
 ```sh
-docker run --rm -it --entrypoint=sh al3xos/python-distroless:3.12-debian12-debug
+docker run --rm -it --entrypoint=sh al3xos/python-distroless:3.13-debian12-debug
 ```
 
-There are variants for Python 3.11 and Python 3.12, both based on Debian 12. They are built from the `python:3.x-slim-bookworm` image base.
+There are variants for Python versions 3.11, 3.12 and Python 3.13, all based on Debian 12. They are built from the `python:3.x-slim-bookworm` image base.
 
-There are variants for Python 3.9 and Python 3.10, both based on Debian 11. They are built from the `python:3.x-slim-bullseye` image base.
-
-> Note: Scripts in this repo will build for Apple Silicon (`-arm64` is appended to the tag), but the CI has not currently been adapted to offer this, so you'll need to build and push locally
+Both `linux/amd64` and `linux/arm64` variants are pushed. Your docker environment should pull down the one that matches your platform (they are built using `docker buildx`)
 
 ### python/builder
 
-For convenience, the `builder` image used to create the above is also published. This is **not** in general going to be useful in running python apps, but can be a convenient way to get a top layer that is `python:3.12-slim-bookworm` but with a non-root user and virtualenv/pipenv/poetry pre-installed - fewer stuff for you to sort in your Dockerfile!
+For convenience, the `builder` image used to create the above is also published. This is **not** in general going to be useful in running python apps, but can be a convenient way to get a top layer that is `python:3.13-slim-bookworm` but with a non-root user and virtualenv/pipenv/poetry pre-installed - fewer stuff for you to sort in your Dockerfile! (Equivalent tags for 3.11 and 3.12 also exist).
 
 To use it:
 
 ```dockerfile
-FROM al3xos/python-builder:3.12-debian12
+FROM al3xos/python-builder:3.13-debian12
 ```
 
 ---
 
 ## Available Versions
 
-This repo now only publishes Python 3.11 & 3.12 images based on Debian 12 (bookworm). Maintaining the tests for Bullseye was getting troublesome - those variants (with Python 3.9 and 3.10 respectively) were last published on 24/11/2023, and will be missing important security fixes from that date.
+This repo now only publishes Python 3.11, 3.12 and 3.13 images based on Debian 12 (bookworm). Whilst images for 3.9 and 3.10 do exist, they were last published on 24/11/2023 and will miss important security fixes - maintaining the tests for Bullseye was getting troublesome.
 
 ---
 
@@ -65,10 +63,6 @@ Python and OS version are set in `.gitlab-ci.yml`. This repo originates at [http
 ## Implementation
 
 Following issues copying the Bazel-based approach used by [Google's distroless repo itself](https://github.com/GoogleContainerTools/distroless), I switched approach to a technique I understood better - multi-layer docker images. I took the distroless C image as a base and then used an earlier docker layer to bring in my choice of Python + its dependencies in.
-
-### A Note on M1 / Apple Silicon
-
-The scripts can be used locally to build an `-arm64` variant, but the CI will currently only build the x86_64 version. I haven't yet looked into options to deal with this yet.
 
 ---
 

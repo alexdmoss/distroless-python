@@ -12,17 +12,21 @@ stages:
 variables:
   TRIVY_VERSION: "0.59.1"
 
-.python-3.11-debian12:
-  variables:
-    PYTHON_MAJOR_VERSION: "3.11"
-    PYTHON_VERSION: "3.11.11"
-    OS_VERSION: debian12
-    DEBIAN_NAME: bookworm
+# .python-3.11-debian12:
+#   variables:
+#     PYTHON_VERSION: "3.11.11"
+#     OS_VERSION: debian12
+#     DEBIAN_NAME: bookworm
 
-.python-3.12-debian12:
+# .python-3.12-debian12:
+#   variables:
+#     PYTHON_VERSION: "3.12.9"
+#     OS_VERSION: debian12
+#     DEBIAN_NAME: bookworm
+
+.python-3.13-debian12:
   variables:
-    PYTHON_MAJOR_VERSION: "3.12"
-    PYTHON_VERSION: "3.12.9"
+    PYTHON_VERSION: "3.13.2"
     OS_VERSION: debian12
     DEBIAN_NAME: bookworm
 
@@ -30,5 +34,6 @@ variables:
 
 include:
 - local: "stages/gitlab-templates.yaml"
-- local: "stages/python-3.11-debian12.yaml"
-- local: "stages/python-3.12-debian12.yaml"
+# - local: "stages/python-3.11-debian12.yaml"
+# - local: "stages/python-3.12-debian12.yaml"
+- local: "stages/python-3.3-debian12.yaml"
