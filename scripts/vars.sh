@@ -15,10 +15,12 @@ if [[ -z ${OS_VERSION:-} ]]; then
     exit 1
 fi
 
-git name-rev --name-only HEAD
-current_branch=$(git name-rev --name-only HEAD)
 RC=""
-if [[ $current_branch != "main" ]]; then
+if [[ $CI_SERVER == "yes" ]]; then
+    if [[ $CI_COMMIT_BRANCH != "main" ]]; then
+        RC="-rc"
+    fi
+elif [[ $(git name-rev --name-only HEAD) != "main" ]]; then
     RC="-rc"
 fi
 
@@ -27,12 +29,15 @@ GOOGLE_DISTROLESS_BASE_IMAGE=gcr.io/distroless/cc-${OS_VERSION}
 # Cut patch version from semver Python version for streamlined image tags: 3.12.0 -> 3.12
 PYTHON_MINOR=$(echo $PYTHON_VERSION | sed -e "s#^\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)#\1.\2#")
 PYTHON_BUILDER_IMAGE=al3xos/python-builder:${PYTHON_MINOR}-${OS_VERSION}${RC}
+PYTHON_BUILDER_IMAGE_FULL=al3xos/python-builder:${PYTHON_VERSION}-${OS_VERSION}${RC}
 PYTHON_DISTROLESS_IMAGE=al3xos/python-distroless:${PYTHON_MINOR}-${OS_VERSION}${RC}
+PYTHON_DISTROLESS_IMAGE_FULL=al3xos/python-distroless:${PYTHON_VERSION}-${OS_VERSION}${RC}
 TEST_IMAGE_BASE=al3xos/python-distroless-tests${RC}
 
 
 if [[ $(echo "${@:-}" | grep -c -- '--debug') -gt 0 ]]; then
     PYTHON_DISTROLESS_IMAGE=${PYTHON_DISTROLESS_IMAGE}-debug
+    PYTHON_DISTROLESS_IMAGE_FULL=${PYTHON_DISTROLESS_IMAGE_FULL}-debug
     TEST_IMAGE_BASE=${TEST_IMAGE_BASE}-debug
 fi
 
@@ -44,7 +49,9 @@ export PYTHON_VERSION
 export PYTHON_MINOR
 export OS_VERSION
 export PYTHON_BUILDER_IMAGE
+export PYTHON_BUILDER_IMAGE_FULL
 export PYTHON_DISTROLESS_IMAGE
+export PYTHON_DISTROLESS_IMAGE_FULL
 export GOOGLE_DISTROLESS_BASE_IMAGE
 export TEST_IMAGE_BASE
 export CI_PIPELINE_ID

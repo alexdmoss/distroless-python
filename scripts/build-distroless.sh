@@ -21,6 +21,7 @@ docker buildx build \
     --build-arg PYTHON_MINOR="${PYTHON_MINOR}" \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
     -t "${PYTHON_DISTROLESS_IMAGE}-${CI_PIPELINE_ID}${TAG}" \
+    -t "${PYTHON_DISTROLESS_IMAGE_FULL}-${CI_PIPELINE_ID}${TAG}" \
     -f distroless.Dockerfile . \
     --push
 
@@ -31,6 +32,7 @@ docker buildx build \
     --build-arg PYTHON_MINOR="${PYTHON_MINOR}" \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
     -t "${PYTHON_DISTROLESS_IMAGE}-debug-${CI_PIPELINE_ID}${TAG}" \
+    -t "${PYTHON_DISTROLESS_IMAGE_FULL}-debug-${CI_PIPELINE_ID}${TAG}" \
     -f distroless.Dockerfile . \
     --push
 
