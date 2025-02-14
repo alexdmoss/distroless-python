@@ -3,15 +3,18 @@ ARG GOOGLE_DISTROLESS_BASE_IMAGE
 
 ## -------------- layer to give access to newer python + its dependencies ------------- ##
 
-FROM ${PYTHON_BUILDER_IMAGE} as python-base
+FROM ${PYTHON_BUILDER_IMAGE} AS python-base
+
+# this script is dealing with the fact that with buildx we can't tell the path to these libs (it's not just TARGETARCH)
+COPY lib_linker.sh /
+RUN /lib_linker.sh
 
 ## ------------------------------- distroless base image ------------------------------ ##
 
 # build from distroless C or cc:debug, because lots of Python depends on C
 FROM ${GOOGLE_DISTROLESS_BASE_IMAGE}
 
-ARG CHIPSET_ARCH=x86_64-linux-gnu
-ARG PYTHON_MAJOR_VERSION
+ARG PYTHON_MINOR
 ARG PYTHON_VERSION
 
 ## ------------------------- copy python itself from builder -------------------------- ##
@@ -23,13 +26,10 @@ COPY --from=python-base /etc/ld.so.cache /etc/
 
 ## -------------------------- add common compiled libraries --------------------------- ##
 
-# If seeing ImportErrors, check if in the python-base already and copy as below
-
-# required by lots of packages - e.g. six, numpy, wsgi
-COPY --from=python-base /lib/${CHIPSET_ARCH}/libz.so.1 /lib/${CHIPSET_ARCH}/
-# required by google-cloud/grpcio
-COPY --from=python-base /usr/lib/${CHIPSET_ARCH}/libffi* /usr/lib/${CHIPSET_ARCH}/
-COPY --from=python-base /lib/${CHIPSET_ARCH}/libexpat* /lib/${CHIPSET_ARCH}/
+# see lib_linker.sh for how these tmp paths get generated
+COPY --from=python-base /tmp/python-libs/libz.so.1 /lib/x86_64-linux-gnu/
+COPY --from=python-base /tmp/python-libs/libffi* /usr/lib/x86_64-linux-gnu/
+COPY --from=python-base /tmp/python-libs/libexpat* /lib/x86_64-linux-gnu/
 
 ## -------------------------------- non-root user setup ------------------------------- ##
 
@@ -38,13 +38,15 @@ COPY --from=python-base /bin/echo /bin/ln /bin/rm /bin/sh /bin/
 # quick validation that python still works whilst we have a shell
 # pipenv links python to python3 in venv
 RUN echo "monty:x:1000:monty" >> /etc/group \
- && echo "monty:x:1001:" >> /etc/group \
- && echo "monty:x:1000:1001::/home/monty:" >> /etc/passwd \
- && python --version \
- && ln -s /usr/local/bin/python /usr/local/bin/python3 \
- && ln -s /usr/local/bin/python /usr/local/bin/python${PYTHON_MAJOR_VERSION} \
- && ln -s /usr/local/bin/python /usr/local/bin/python${PYTHON_VERSION} \
- && rm /bin/echo /bin/ln /bin/rm /bin/sh
+    && echo "monty:x:1001:" >> /etc/group \
+    && echo "monty:x:1000:1001::/home/monty:" >> /etc/passwd \
+    && python --version \
+    && ln -s /usr/local/bin/python /usr/local/bin/python3 \
+    && ln -s /usr/local/bin/python /usr/local/bin/python${PYTHON_MINOR} \
+    && ln -s /usr/local/bin/python /usr/local/bin/python${PYTHON_VERSION}
+
+# clear out our temporary shell now done with it
+RUN rm /bin/echo /bin/ln /bin/rm /bin/sh
 
 ## --------------------------- standardise execution env ----------------------------- ##
 
@@ -52,9 +54,9 @@ RUN echo "monty:x:1000:monty" >> /etc/group \
 USER monty
 
 # standardise on locale, don't generate .pyc, enable tracebacks on seg faults
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONFAULTHANDLER 1
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONFAULTHANDLER=1
 
 ENTRYPOINT ["/usr/local/bin/python"]

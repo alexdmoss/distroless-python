@@ -5,12 +5,6 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     exit 1
 fi
 
-ARCH=""
-if [[ $(uname -m) == "arm64" ]]; then
-    echo "-> [WARN] Apple Silicon detected. Images will be tagged for arm64 architecture"
-    ARCH="-arm64"
-fi
-
 if [[ -z ${PYTHON_VERSION:-} ]]; then
     echo "-> [ERROR] PYTHON_VERSION not set - aborting"
     exit 1
@@ -21,13 +15,20 @@ if [[ -z ${OS_VERSION:-} ]]; then
     exit 1
 fi
 
+git name-rev --name-only HEAD
+current_branch=$(git name-rev --name-only HEAD)
+RC=""
+if [[ $current_branch != "main" ]]; then
+    RC="-rc"
+fi
+
 # use the C (glibc) distroless - required by common packages like grpcio + numpy
 GOOGLE_DISTROLESS_BASE_IMAGE=gcr.io/distroless/cc-${OS_VERSION}
 # Cut patch version from semver Python version for streamlined image tags: 3.12.0 -> 3.12
 PYTHON_MINOR=$(echo $PYTHON_VERSION | sed -e "s#^\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)#\1.\2#")
-PYTHON_BUILDER_IMAGE=al3xos/python-builder${ARCH}:${PYTHON_MINOR}-${OS_VERSION}
-PYTHON_DISTROLESS_IMAGE=al3xos/python-distroless${ARCH}:${PYTHON_MINOR}-${OS_VERSION}
-TEST_IMAGE_BASE=al3xos/python-distroless-tests
+PYTHON_BUILDER_IMAGE=al3xos/python-builder:${PYTHON_MINOR}-${OS_VERSION}${RC}
+PYTHON_DISTROLESS_IMAGE=al3xos/python-distroless:${PYTHON_MINOR}-${OS_VERSION}${RC}
+TEST_IMAGE_BASE=al3xos/python-distroless-tests${RC}
 
 
 if [[ $(echo "${@:-}" | grep -c -- '--debug') -gt 0 ]]; then
@@ -39,11 +40,9 @@ if [[ -z ${CI_PIPELINE_ID:-} ]]; then
     CI_PIPELINE_ID=non-ci-$(git rev-parse --short HEAD)
 fi
 
-
 export PYTHON_VERSION
 export PYTHON_MINOR
 export OS_VERSION
-export ARCH
 export PYTHON_BUILDER_IMAGE
 export PYTHON_DISTROLESS_IMAGE
 export GOOGLE_DISTROLESS_BASE_IMAGE

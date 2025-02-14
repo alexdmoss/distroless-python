@@ -78,6 +78,6 @@
   extends:
   - .build
   script:
-  - ./scripts/publish.sh
+  - ./scripts/build-distroless.sh --publish
   only:
   - main

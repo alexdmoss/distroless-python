@@ -14,7 +14,7 @@ fi
 
 # not scanning python builder base image - should not be used outside CI
 IMAGES="
-${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}
+${PYTHON_DISTROLESS_IMAGE}-${CI_PIPELINE_ID}-intermediate
 "
 
 for image in ${IMAGES}; do

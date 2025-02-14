@@ -7,34 +7,31 @@ pushd "$(dirname "${BASH_SOURCE[0]}")/../" >/dev/null || exit
 # shellcheck disable=SC1091
 . ./scripts/vars.sh
 
-if [[ ${ARCH} == "-arm64" ]]; then
-    CHIPSET_ARCH=aarch64-linux-gnu
-else
-    CHIPSET_ARCH=x86_64-linux-gnu
+TAG="-intermediate"
+if [[ "${1:-}" == "--publish" ]]; then
+    TAG=""
 fi
 
-docker build \
+docker buildx create --name multiarch-builder --use --bootstrap --driver docker-container --platform linux/amd64,linux/arm64 || true
+
+docker buildx build \
+    --platform linux/amd64,linux/arm64 \
     --build-arg PYTHON_BUILDER_IMAGE="${PYTHON_BUILDER_IMAGE}" \
     --build-arg GOOGLE_DISTROLESS_BASE_IMAGE="${GOOGLE_DISTROLESS_BASE_IMAGE}" \
-    --build-arg CHIPSET_ARCH="${CHIPSET_ARCH}" \
-    --build-arg PYTHON_MAJOR_VERSION="${PYTHON_MAJOR_VERSION}" \
+    --build-arg PYTHON_MINOR="${PYTHON_MINOR}" \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
-    -t "${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}" \
-    -f distroless.Dockerfile .
+    -t "${PYTHON_DISTROLESS_IMAGE}-${CI_PIPELINE_ID}${TAG}" \
+    -f distroless.Dockerfile . \
+    --push
 
-
-docker build \
+docker buildx build \
+    --platform linux/amd64,linux/arm64 \
     --build-arg PYTHON_BUILDER_IMAGE="${PYTHON_BUILDER_IMAGE}" \
     --build-arg GOOGLE_DISTROLESS_BASE_IMAGE="${GOOGLE_DISTROLESS_BASE_IMAGE}:debug" \
-    --build-arg CHIPSET_ARCH="${CHIPSET_ARCH}" \
-    --build-arg PYTHON_MAJOR_VERSION="${PYTHON_MAJOR_VERSION}" \
+    --build-arg PYTHON_MINOR="${PYTHON_MINOR}" \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
-    -t "${PYTHON_DISTROLESS_IMAGE}-debug-intermediate-${CI_PIPELINE_ID}" \
-    -f distroless.Dockerfile .
-
-if [[ ${CI_SERVER:-} == "yes" ]]; then
-    docker push "${PYTHON_DISTROLESS_IMAGE}-intermediate-${CI_PIPELINE_ID}"
-    docker push "${PYTHON_DISTROLESS_IMAGE}-debug-intermediate-${CI_PIPELINE_ID}"
-fi
+    -t "${PYTHON_DISTROLESS_IMAGE}-debug-${CI_PIPELINE_ID}${TAG}" \
+    -f distroless.Dockerfile . \
+    --push
 
 popd > /dev/null || exit
