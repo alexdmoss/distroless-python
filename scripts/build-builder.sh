@@ -15,6 +15,7 @@ docker buildx build \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
     --build-arg DEBIAN_NAME="${DEBIAN_NAME}" \
     -t "${PYTHON_BUILDER_IMAGE}" \
+    -t "${PYTHON_BUILDER_IMAGE_FULL}" \
     -f builder.Dockerfile . \
     --push
 
