@@ -7,7 +7,7 @@ pushd "$(dirname "${BASH_SOURCE[0]}")/../" >/dev/null || exit
 # shellcheck disable=SC1091
 . ./scripts/vars.sh
 
-TAG="-intermediate"
+TAG="-${CI_PIPELINE_ID}-intermediate"
 if [[ "${1:-}" == "--publish" ]]; then
     TAG=""
 fi
@@ -20,8 +20,8 @@ docker buildx build \
     --build-arg GOOGLE_DISTROLESS_BASE_IMAGE="${GOOGLE_DISTROLESS_BASE_IMAGE}" \
     --build-arg PYTHON_MINOR="${PYTHON_MINOR}" \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
-    -t "${PYTHON_DISTROLESS_IMAGE}-${CI_PIPELINE_ID}${TAG}" \
-    -t "${PYTHON_DISTROLESS_IMAGE_FULL}-${CI_PIPELINE_ID}${TAG}" \
+    -t "${PYTHON_DISTROLESS_IMAGE}${TAG}" \
+    -t "${PYTHON_DISTROLESS_IMAGE_FULL}${TAG}" \
     -f distroless.Dockerfile . \
     --push
 
@@ -31,8 +31,8 @@ docker buildx build \
     --build-arg GOOGLE_DISTROLESS_BASE_IMAGE="${GOOGLE_DISTROLESS_BASE_IMAGE}:debug" \
     --build-arg PYTHON_MINOR="${PYTHON_MINOR}" \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
-    -t "${PYTHON_DISTROLESS_IMAGE}-debug-${CI_PIPELINE_ID}${TAG}" \
-    -t "${PYTHON_DISTROLESS_IMAGE_FULL}-debug-${CI_PIPELINE_ID}${TAG}" \
+    -t "${PYTHON_DISTROLESS_IMAGE}-debug${TAG}" \
+    -t "${PYTHON_DISTROLESS_IMAGE_FULL}-debug${TAG}" \
     -f distroless.Dockerfile . \
     --push
 
