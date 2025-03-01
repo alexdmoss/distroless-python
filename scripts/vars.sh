@@ -15,8 +15,15 @@ if [[ -z ${OS_VERSION:-} ]]; then
     exit 1
 fi
 
+if [[ -z ${DEBIAN_NAME:-} ]]; then
+    echo "-> [ERROR] DEBIAN_NAME not set - aborting"
+    exit 1
+fi
+
+INTERMEDIATE_REGISTRY_BASE="al3xos"
 RC=""
-if [[ $CI_SERVER == "yes" ]]; then
+if [[ ${CI_SERVER:-} == "yes" ]]; then
+    INTERMEDIATE_REGISTRY_BASE="registry.gitlab.com/al3xos/distroless-python"
     if [[ $CI_COMMIT_BRANCH != "main" ]]; then
         RC="-rc"
     fi
@@ -31,10 +38,17 @@ PYTHON_MINOR=$(echo $PYTHON_VERSION | sed -e "s#^\([0-9]*\)\.\([0-9]*\)\.\([0-9]
 
 TEST_IMAGE_BASE=registry.gitlab.com/al3xos/distroless-python/python-distroless-tests${RC}
 
-PYTHON_INTERMEDIATE_BUILDER_IMAGE=registry.gitlab.com/al3xos/distroless-python/python-builder:${PYTHON_MINOR}-${OS_VERSION}${RC}
-PYTHON_INTERMEDIATE_BUILDER_IMAGE_FULL=registry.gitlab.com/al3xos/distroless-python/python-builder:${PYTHON_VERSION}-${OS_VERSION}${RC}
-PYTHON_INTERMEDIATE_DISTROLESS_IMAGE=registry.gitlab.com/al3xos/distroless-python/python-distroless:${PYTHON_MINOR}-${OS_VERSION}${RC}
-PYTHON_INTERMEDIATE_DISTROLESS_IMAGE_FULL=registry.gitlab.com/al3xos/distroless-python/python-distroless:${PYTHON_VERSION}-${OS_VERSION}${RC}
+if [[ ${CI_SERVER:-} == "yes" ]]; then
+    if [[ $CI_COMMIT_BRANCH != "main" ]]; then
+        RC="-rc"
+    fi
+elif [[ $(git name-rev --name-only HEAD) != "main" ]]; then
+    RC="-rc"
+fi
+PYTHON_INTERMEDIATE_BUILDER_IMAGE=${INTERMEDIATE_REGISTRY_BASE}/python-builder:${PYTHON_MINOR}-${OS_VERSION}${RC}
+PYTHON_INTERMEDIATE_BUILDER_IMAGE_FULL=${INTERMEDIATE_REGISTRY_BASE}/python-builder:${PYTHON_VERSION}-${OS_VERSION}${RC}
+PYTHON_INTERMEDIATE_DISTROLESS_IMAGE=${INTERMEDIATE_REGISTRY_BASE}/python-distroless:${PYTHON_MINOR}-${OS_VERSION}${RC}
+PYTHON_INTERMEDIATE_DISTROLESS_IMAGE_FULL=${INTERMEDIATE_REGISTRY_BASE}/python-distroless:${PYTHON_VERSION}-${OS_VERSION}${RC}
 
 PYTHON_FINAL_BUILDER_IMAGE=al3xos/python-builder:${PYTHON_MINOR}-${OS_VERSION}${RC}
 PYTHON_FINAL_BUILDER_IMAGE_FULL=al3xos/python-builder:${PYTHON_VERSION}-${OS_VERSION}${RC}
