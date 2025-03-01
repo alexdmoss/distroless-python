@@ -18,8 +18,8 @@ function build_test_image() {
     docker build \
         --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
         --build-arg DEBIAN_NAME="${DEBIAN_NAME}" \
-        --build-arg PYTHON_BUILDER_IMAGE="${PYTHON_BUILDER_IMAGE}" \
-        --build-arg PYTHON_DISTROLESS_IMAGE="${PYTHON_DISTROLESS_IMAGE}-${CI_PIPELINE_ID}-intermediate" \
+        --build-arg PYTHON_BUILDER_IMAGE="${PYTHON_INTERMEDIATE_BUILDER_IMAGE}-${CI_PIPELINE_ID}-intermediate" \
+        --build-arg PYTHON_DISTROLESS_IMAGE="${PYTHON_INTERMEDIATE_DISTROLESS_IMAGE}-${CI_PIPELINE_ID}-intermediate" \
         -t "${image_tag}" .
 
     if [[ "${?}" -gt 0 ]]; then
