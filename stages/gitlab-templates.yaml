@@ -7,11 +7,18 @@
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
+  after_script:
+  - rm -f /root/.docker/config.json
+
+.docker-login:
   before_script:
   - until docker info >/dev/null; do sleep 1; echo "Waiting for docker startup"; done
   - echo "${DOCKER_CREDS}" | docker login --username al3xos --password-stdin
-  after_script:
-  - rm -f /root/.docker/config.json
+
+.gitlab-login:
+  before_script:
+  - until docker info >/dev/null; do sleep 1; echo "Waiting for docker startup"; done
+  - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
 
 .test:
   image: mosstech/gcloud-and-docker:424.0.0
@@ -29,6 +36,7 @@
   stage: build-builder
   extends:
   - .build
+  - .gitlab-login
   script:
   - ./scripts/build-builder.sh
 
@@ -36,6 +44,7 @@
   stage: build-distroless
   extends:
   - .build
+  - .gitlab-login
   script:
   - ./scripts/build-distroless.sh
 
@@ -61,6 +70,7 @@
   stage: advanced-tests
   extends:
   - .test
+  - .gitlab-login
   script:
   - ./scripts/tests.sh --target pandas
   - ./scripts/tests.sh --target google-cloud
@@ -70,14 +80,17 @@
   stage: scan
   extends:
   - .build
+  - .gitlab-login
   script:
   - ./scripts/scan.sh
 
 .publish:
   stage: publish
   extends:
-  - .build
+  - .build-docker
+  - .docker-login
   script:
+  - ./scripts/build-builder.sh --publish
   - ./scripts/build-distroless.sh --publish
   only:
   - main
