@@ -9,15 +9,15 @@ pushd "$(dirname "${BASH_SOURCE[0]}")/../" >/dev/null || exit
 
 
 if [[ "${1:-}" == "--publish" ]]; then
+    TAG=""
     PYTHON_BUILDER_IMAGE="${PYTHON_FINAL_BUILDER_IMAGE}"
     PYTHON_DISTROLESS_IMAGE="${PYTHON_FINAL_DISTROLESS_IMAGE}"
     PYTHON_DISTROLESS_IMAGE_FULL="${PYTHON_FINAL_DISTROLESS_IMAGE_FULL}"
-    TAG=""
 else
-    PYTHON_BUILDER_IMAGE="${PYTHON_INTERMEDIATE_BUILDER_IMAGE}"
+    TAG="-${CI_PIPELINE_ID}-intermediate"
+    PYTHON_BUILDER_IMAGE="${PYTHON_INTERMEDIATE_BUILDER_IMAGE}${TAG}"
     PYTHON_DISTROLESS_IMAGE="${PYTHON_INTERMEDIATE_DISTROLESS_IMAGE}"
     PYTHON_DISTROLESS_IMAGE_FULL="${PYTHON_INTERMEDIATE_DISTROLESS_IMAGE_FULL}"
-    TAG="-${CI_PIPELINE_ID}-intermediate"
 fi
 
 docker buildx create --name multiarch-builder --use --bootstrap --driver docker-container --platform linux/amd64,linux/arm64 || true
