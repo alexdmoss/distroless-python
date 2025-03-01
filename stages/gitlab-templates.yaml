@@ -7,8 +7,6 @@
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
-  after_script:
-  - rm -f /root/.docker/config.json
 
 .docker-login:
   before_script:
@@ -87,7 +85,7 @@
 .publish:
   stage: publish
   extends:
-  - .build-docker
+  - .build
   - .docker-login
   script:
   - ./scripts/build-builder.sh --publish
