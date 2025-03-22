@@ -19,6 +19,6 @@ poetry run python app.py
 Gunicorn:
 
 ```sh
-docker build --build-arg=PYTHON_VERSION=3.12 --build-arg=PYTHON_DISTROLESS_IMAGE=al3xos/python-distroless:3.12-debian12 -t gunicorn-test .
+docker build --build-arg=PYTHON_VERSION=3.12 --build-arg=DEBIAN_NAME=bookworm --build-arg=PYTHON_DISTROLESS_IMAGE=al3xos/python-distroless:3.12-debian12 -t gunicorn-test .
 docker run --rm -p 5000:5000 gunicorn-test
 ```
