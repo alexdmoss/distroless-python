@@ -1,0 +1,38 @@
+name: Deploy on Main
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  TRIVY_VERSION: "0.59.1"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Docker Login
+        run: echo "${{ secrets.DOCKER_CREDS }}" | docker login --username al3xos --password-stdin
+
+      - name: GitLab Registry Login
+        run: echo "${{ secrets.CI_REGISTRY_PASSWORD }}" | docker login ${{ secrets.CI_REGISTRY }} -u ${{ secrets.CI_REGISTRY_USER }} --password-stdin
+
+      - name: Build Builder
+        run: ./scripts/build-builder.sh
+
+      - name: Build Distroless
+        run: ./scripts/build-distroless.sh
+
+      - name: Publish Images
+        run: |
+          ./scripts/build-builder.sh --publish
+          ./scripts/build-distroless.sh --publish

@@ -1,0 +1,36 @@
+name: Pull Request Checks
+
+on: pull_request
+
+jobs:
+  test-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Basic Tests
+        run: |
+          ./scripts/tests.sh --target version
+          ./scripts/tests.sh --target version --debug
+          ./scripts/tests.sh --target hello-world
+          ./scripts/tests.sh --target hello-world --debug
+
+      - name: HTTP Tests
+        run: |
+          ./scripts/tests.sh --target gunicorn
+          ./scripts/tests.sh --target fastapi
+
+      - name: Advanced Tests
+        run: |
+          ./scripts/tests.sh --target pandas
+          ./scripts/tests.sh --target google-cloud
+          ./scripts/tests.sh --target kubernetes
+
+      - name: Security Scan
+        run: ./scripts/scan.sh
