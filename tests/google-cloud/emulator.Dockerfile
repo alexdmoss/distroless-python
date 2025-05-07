@@ -1,4 +1,4 @@
-FROM google/cloud-sdk:518.0.0-alpine
+FROM google/cloud-sdk:520.0.0-alpine
 
 RUN apk --no-cache update && \
     apk --no-cache add openjdk8-jre && \
