@@ -1,0 +1,13 @@
+[project]
+name = "test-fastapi"
+version = "0.1.0"
+description = "Simple test of FastAPI app with uv"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.1.0",
+    "httpx>=0.28.1",
+    "pydantic>=2.11.4",
+    "typing-extensions>=4.13.2",
+    "uvicorn>=0.34.2",
+]

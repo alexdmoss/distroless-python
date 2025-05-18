@@ -30,3 +30,9 @@ ENV PYTHONFAULTHANDLER=1
 
 RUN pip install --upgrade pip && \
     pip install --no-warn-script-location virtualenv poetry pipenv
+
+# ----------- install latest uv for use elsewhere as builder image ----------  #
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
+ENV UV_PYTHON_DOWNLOADS=0
