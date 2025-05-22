@@ -1,7 +1,7 @@
 ARG PYTHON_BUILDER_IMAGE
 ARG PYTHON_DISTROLESS_IMAGE
 
-FROM builder-3.13:main AS builder
+FROM ${PYTHON_BUILDER_IMAGE} AS builder
 
 WORKDIR /app
 COPY pyproject.toml uv.lock /app/
@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # ------------------------------------------------------------------
 
-FROM distroless-3.13:main
+FROM ${PYTHON_DISTROLESS_IMAGE}
 
 ARG PYTHON_VERSION
 
