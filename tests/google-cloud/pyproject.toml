@@ -1,0 +1,12 @@
+[project]
+name = "google-cloud"
+version = "0.1.0"
+description = "Simple test of google-cloud-pubsub app with uv"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "google-api-core>=2.24.2",
+    "google-api-python-client>=2.169.0",
+    "google-auth>=2.40.2",
+    "google-cloud-pubsub>=2.29.0",
+]

@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION="3.11.11"
+ARG PYTHON_VERSION="3.13.3"
 ARG DEBIAN_NAME="bookworm"
 
 # several optimisations in python-slim images already, benefit from these
@@ -10,7 +10,7 @@ ARG NONROOT_USER="monty"
 ARG NONROOT_GROUP="monty"
 
 RUN groupadd ${NONROOT_GROUP} \
- && useradd -m ${NONROOT_USER} -g ${NONROOT_GROUP}
+    && useradd -m ${NONROOT_USER} -g ${NONROOT_GROUP}
 
 USER ${NONROOT_USER}
 

@@ -1,12 +1,6 @@
 from google.cloud import pubsub_v1
 from google.api_core.exceptions import AlreadyExists
 
-# if using creds builder:
-from distutils.command.build import build
-import json
-from os import getenv
-from google.oauth2 import service_account
-
 
 def main():
 
@@ -15,11 +9,6 @@ def main():
     project_id = "made-up-project"
     topic_id = "alexos-distroless-python-test"
 
-    ### stubbed to use emulator instead. If reverting, then:
-    # creds_json = getenv("GOOGLE_CREDENTIALS")
-    # sa_info = json.loads(creds_json)
-    # creds = service_account.Credentials.from_service_account_info(sa_info)
-    # publisher = pubsub_v1.PublisherClient(credentials=creds)    
     publisher = pubsub_v1.PublisherClient()
 
     print("Client created - creating topic ...")
