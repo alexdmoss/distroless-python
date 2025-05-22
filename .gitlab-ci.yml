@@ -12,19 +12,18 @@ stages:
 variables:
   TRIVY_VERSION: "0.59.1"
 
-# .python-3.11-debian12:
-#   variables:
-#     PYTHON_VERSION: "3.11.11"
-#     OS_VERSION: debian12
-#     DEBIAN_NAME: bookworm
+.python-3.11-debian12:
+  variables:
+    PYTHON_VERSION: "3.11.11"
+    OS_VERSION: debian12
+    DEBIAN_NAME: bookworm
 
-# .python-3.12-debian12:
-#   variables:
-#     PYTHON_VERSION: "3.12.9"
-#     OS_VERSION: debian12
-#     DEBIAN_NAME: bookworm
+.python-3.12-debian12:
+  variables:
+    PYTHON_VERSION: "3.12.9"
+    OS_VERSION: debian12
+    DEBIAN_NAME: bookworm
 
-### Putting this on hold as too many packages need to be built from source still - makes things messy!
 .python-3.13-debian12:
   variables:
     PYTHON_VERSION: "3.13.3"
@@ -35,6 +34,6 @@ variables:
 
 include:
 - local: "stages/gitlab-templates.yaml"
-# - local: "stages/python-3.11-debian12.yaml"
-# - local: "stages/python-3.12-debian12.yaml"
+- local: "stages/python-3.11-debian12.yaml"
+- local: "stages/python-3.12-debian12.yaml"
 - local: "stages/python-3.13-debian12.yaml"
