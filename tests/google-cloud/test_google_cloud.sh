@@ -17,8 +17,11 @@ function test_google_cloud_image() {
 
     _console_msg "Starting PubSub Emulator ..." INFO
 
-    docker run --rm --name=pubsub-emulator --network=distroless -d -p 127.0.0.1:8085:8085/tcp mosstech/pubsub-emulator:latest
-    
+    docker run --rm --name=pubsub-emulator --network=distroless -d -p 127.0.0.1:8085:8085/tcp al3xos/pubsub-emulator:latest
+
+    _console_msg "Giving time for emulator to start ..." INFO
+    sleep 10
+
     _console_msg "Testing image output for [${image_tag}]" INFO
 
     output=$(docker run --rm -e=PUBSUB_EMULATOR_HOST=pubsub-emulator:8085 --network=distroless "${image_tag}")

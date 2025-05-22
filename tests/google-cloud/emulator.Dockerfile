@@ -1,7 +1,7 @@
-FROM google/cloud-sdk:520.0.0-alpine
+FROM google/cloud-sdk:523.0.0-alpine
 
 RUN apk --no-cache update && \
-    apk --no-cache add openjdk8-jre && \
+    apk --no-cache add openjdk21-jre && \
     rm -rf /var/cache/apk/*
 
 RUN gcloud components install --quiet beta pubsub-emulator && \
