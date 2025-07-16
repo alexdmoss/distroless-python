@@ -24,13 +24,13 @@ A debug image also exists:
 docker run --rm -it --entrypoint=sh al3xos/python-distroless:3.13-debian12-debug
 ```
 
-There are variants for Python versions 3.11, 3.12 and Python 3.13, all based on Debian 12. They are built from the `python:3.x-slim-bookworm` image base.
+There are variants for Python versions 3.12 and Python 3.13, all based on Debian 12. They are built from the `python:3.x-slim-bookworm` image base.
 
 Both `linux/amd64` and `linux/arm64` variants are pushed. Your docker environment should pull down the one that matches your platform (they are built using `docker buildx`)
 
 ### python/builder
 
-For convenience, the `builder` image used to create the above is also published. This is **not** in general going to be useful in running python apps, but can be a convenient way to get a top layer that is `python:3.13-slim-bookworm` but with a non-root user and virtualenv/pipenv/poetry pre-installed - fewer stuff for you to sort in your Dockerfile! (Equivalent tags for 3.11 and 3.12 also exist).
+For convenience, the `builder` image used to create the above is also published. This is **not** in general going to be useful in running python apps, but can be a convenient way to get a top layer that is `python:3.13-slim-bookworm` but with a non-root user and virtualenv/pipenv/poetry pre-installed - fewer stuff for you to sort in your Dockerfile! (Equivalent tags for 3.12 also exist).
 
 To use it:
 
@@ -42,7 +42,7 @@ FROM al3xos/python-builder:3.13-debian12
 
 ## Available Versions
 
-This repo now only publishes Python 3.11, 3.12 and 3.13 images based on Debian 12 (bookworm). Whilst images for 3.9 and 3.10 do exist, they were last published on 24/11/2023 and will miss important security fixes - maintaining the tests for Bullseye was getting troublesome.
+This repo now only publishes Python 3.12 and 3.13 images based on Debian 12 (bookworm). Tags existed for 3.9, 3.10 and 3.11 but are no longer actively maintained due to missing important security fixes.
 
 ---
 
