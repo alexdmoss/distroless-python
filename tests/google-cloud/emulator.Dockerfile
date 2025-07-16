@@ -1,4 +1,4 @@
-FROM google/cloud-sdk:523.0.0-alpine
+FROM google/cloud-sdk:529.0.0-alpine
 
 RUN apk --no-cache update && \
     apk --no-cache add openjdk21-jre && \
