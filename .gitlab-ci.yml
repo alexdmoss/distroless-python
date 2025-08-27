@@ -12,21 +12,21 @@ stages:
 variables:
   TRIVY_VERSION: "0.64.0"
 
-.python-3.12-debian12:
+.python-3.12-debian13:
   variables:
     PYTHON_VERSION: "3.12.11"
-    OS_VERSION: debian12
-    DEBIAN_NAME: bookworm
+    OS_VERSION: debian13
+    DEBIAN_NAME: trixie
 
-.python-3.13-debian12:
+.python-3.13-debian13:
   variables:
-    PYTHON_VERSION: "3.13.5"
-    OS_VERSION: debian12
-    DEBIAN_NAME: bookworm
+    PYTHON_VERSION: "3.13.7"
+    OS_VERSION: debian13
+    DEBIAN_NAME: trixie
 
 # --------------------- Build Stages -------------------- #
 
 include:
 - local: "stages/gitlab-templates.yaml"
-- local: "stages/python-3.12-debian12.yaml"
-- local: "stages/python-3.13-debian12.yaml"
+- local: "stages/python-3.12-debian13.yaml"
+- local: "stages/python-3.13-debian13.yaml"
