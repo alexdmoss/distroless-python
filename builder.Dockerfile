@@ -1,5 +1,5 @@
-ARG PYTHON_VERSION="3.13.7"
-ARG DEBIAN_NAME="trixie"
+ARG PYTHON_VERSION="3.13.5"
+ARG DEBIAN_NAME="bookworm"
 
 # several optimisations in python-slim images already, benefit from these
 FROM python:${PYTHON_VERSION}-slim-${DEBIAN_NAME}
