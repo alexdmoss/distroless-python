@@ -10,17 +10,17 @@ stages:
 # ---------------------- Variables ---------------------- #
 
 variables:
-  TRIVY_VERSION: "0.64.0"
+  TRIVY_VERSION: "0.67.2"
 
 .python-3.12-debian12:
   variables:
-    PYTHON_VERSION: "3.12.11"
+    PYTHON_VERSION: "3.12.12"
     OS_VERSION: debian12
     DEBIAN_NAME: bookworm
 
 .python-3.13-debian12:
   variables:
-    PYTHON_VERSION: "3.13.5"
+    PYTHON_VERSION: "3.13.9"
     OS_VERSION: debian12
     DEBIAN_NAME: bookworm
 
