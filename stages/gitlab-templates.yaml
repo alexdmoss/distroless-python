@@ -4,6 +4,9 @@
   image: al3xos/ci-tools:latest
   services:
   - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
 
 .docker-login:
   before_script:
@@ -19,6 +22,9 @@
   image: al3xos/ci-tools:latest
   services:
   - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
   before_script:
   - until docker info >/dev/null; do sleep 1; echo "Waiting for docker startup"; done
 
