@@ -1,32 +1,43 @@
-stages:
-- build-builder
-- build-distroless
-- basic-tests
-- http-tests
-- advanced-tests
-- scan
-- publish
+# stages:
+# - build-builder
+# - build-distroless
+# - basic-tests
+# - http-tests
+# - advanced-tests
+# - scan
+# - publish
 
-# ---------------------- Variables ---------------------- #
+# # ---------------------- Variables ---------------------- #
 
-variables:
-  TRIVY_VERSION: "0.67.2"
+# variables:
+#   TRIVY_VERSION: "0.67.2"
 
-.python-3.12-debian12:
+# .python-3.12-debian12:
+#   variables:
+#     PYTHON_VERSION: "3.12.12"
+#     OS_VERSION: debian12
+#     DEBIAN_NAME: bookworm
+
+# .python-3.13-debian12:
+#   variables:
+#     PYTHON_VERSION: "3.13.9"
+#     OS_VERSION: debian12
+#     DEBIAN_NAME: bookworm
+
+# # --------------------- Build Stages -------------------- #
+
+# include:
+# - local: "stages/gitlab-templates.yaml"
+# - local: "stages/python-3.12-debian12.yaml"
+# - local: "stages/python-3.13-debian12.yaml"
+
+docker-test:
+  image: al3xos/ci-tools:latest
+  services:
+  - docker:dind
   variables:
-    PYTHON_VERSION: "3.12.12"
-    OS_VERSION: debian12
-    DEBIAN_NAME: bookworm
-
-.python-3.13-debian12:
-  variables:
-    PYTHON_VERSION: "3.13.9"
-    OS_VERSION: debian12
-    DEBIAN_NAME: bookworm
-
-# --------------------- Build Stages -------------------- #
-
-include:
-- local: "stages/gitlab-templates.yaml"
-- local: "stages/python-3.12-debian12.yaml"
-- local: "stages/python-3.13-debian12.yaml"
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+  script:
+  - docker info
+  - docker run --rm hello-world
