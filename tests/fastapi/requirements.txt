@@ -25,11 +25,11 @@ email-validator==2.3.0
     # via
     #   fastapi
     #   pydantic
-fastapi==0.122.0
+fastapi==0.123.10
     # via test-fastapi (pyproject.toml)
 fastapi-cli==0.0.16
     # via fastapi
-fastapi-cloud-cli==0.5.2
+fastapi-cloud-cli==0.6.0
     # via fastapi-cli
 fastar==0.8.0
     # via fastapi-cloud-cli
@@ -84,7 +84,7 @@ rich-toolkit==0.17.0
     #   fastapi-cloud-cli
 rignore==0.7.6
     # via fastapi-cloud-cli
-sentry-sdk==2.46.0
+sentry-sdk==2.47.0
     # via fastapi-cloud-cli
 shellingham==1.5.4
     # via typer
@@ -107,7 +107,7 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
-urllib3==2.5.0
+urllib3==2.6.0
     # via sentry-sdk
 uvicorn==0.38.0
     # via

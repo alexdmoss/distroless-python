@@ -50,12 +50,12 @@ idna==3.11
     # via requests
 importlib-metadata==8.7.0
     # via opentelemetry-api
-opentelemetry-api==1.38.0
+opentelemetry-api==1.39.0
     # via
     #   google-cloud-pubsub
     #   opentelemetry-sdk
     #   opentelemetry-semantic-conventions
-opentelemetry-sdk==1.38.0
+opentelemetry-sdk==1.39.0
     # via google-cloud-pubsub
 opentelemetry-semantic-conventions==0.59b0
     # via opentelemetry-sdk
@@ -91,7 +91,7 @@ typing-extensions==4.15.0
     #   opentelemetry-semantic-conventions
 uritemplate==4.2.0
     # via google-api-python-client
-urllib3==2.5.0
+urllib3==2.6.0
     # via requests
 zipp==3.23.0
     # via importlib-metadata
