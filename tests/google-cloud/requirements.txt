@@ -48,7 +48,7 @@ httplib2==0.31.0
     #   google-auth-httplib2
 idna==3.11
     # via requests
-importlib-metadata==8.7.0
+importlib-metadata==8.7.1
     # via opentelemetry-api
 opentelemetry-api==1.39.1
     # via
@@ -77,7 +77,7 @@ pyasn1==0.6.1
     #   rsa
 pyasn1-modules==0.4.2
     # via google-auth
-pyparsing==3.2.5
+pyparsing==3.3.1
     # via httplib2
 requests==2.32.5
     # via google-api-core
