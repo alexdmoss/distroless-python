@@ -2,18 +2,18 @@
 #    uv pip compile pyproject.toml -o requirements.txt
 cachetools==6.2.4
     # via google-auth
-certifi==2025.11.12
+certifi==2026.1.4
     # via requests
 charset-normalizer==3.4.4
     # via requests
-google-api-core==2.28.1
+google-api-core==2.29.0
     # via
     #   google-cloud (pyproject.toml)
     #   google-api-python-client
     #   google-cloud-pubsub
 google-api-python-client==2.187.0
     # via google-cloud (pyproject.toml)
-google-auth==2.45.0
+google-auth==2.47.0
     # via
     #   google-cloud (pyproject.toml)
     #   google-api-core
@@ -91,7 +91,7 @@ typing-extensions==4.15.0
     #   opentelemetry-semantic-conventions
 uritemplate==4.2.0
     # via google-api-python-client
-urllib3==2.6.2
+urllib3==2.6.3
     # via requests
 zipp==3.23.0
     # via importlib-metadata
