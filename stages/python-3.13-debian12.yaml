@@ -2,8 +2,6 @@ build-builder-python-3.13-debian12:
   extends:
   - .build-builder
   - .python-3.13-debian12
-  only:
-  - main
 
 build-distroless-python-3.13-debian12:
   extends:
@@ -11,8 +9,6 @@ build-distroless-python-3.13-debian12:
   - .python-3.13-debian12
   needs:
   - build-builder-python-3.13-debian12
-  only:
-  - main
 
 basic-tests-python-3.13-debian12:
   extends:
@@ -20,8 +16,6 @@ basic-tests-python-3.13-debian12:
   - .python-3.13-debian12
   needs:
   - build-distroless-python-3.13-debian12
-  only:
-  - main
 
 http-tests-python-3.13-debian12:
   extends:
@@ -29,8 +23,6 @@ http-tests-python-3.13-debian12:
   - .python-3.13-debian12
   needs:
   - build-distroless-python-3.13-debian12
-  only:
-  - main
 
 advanced-tests-python-3.13-debian12:
   extends:
@@ -38,8 +30,6 @@ advanced-tests-python-3.13-debian12:
   - .python-3.13-debian12
   needs:
   - build-distroless-python-3.13-debian12
-  only:
-  - main
 
 scan-python-3.13-debian12:
   extends:
@@ -47,8 +37,6 @@ scan-python-3.13-debian12:
   - .python-3.13-debian12
   needs:
   - build-distroless-python-3.13-debian12
-  only:
-  - main
 
 publish-python-3.13-debian12:
   extends:
@@ -59,5 +47,3 @@ publish-python-3.13-debian12:
   - http-tests-python-3.13-debian12
   - advanced-tests-python-3.13-debian12
   - scan-python-3.13-debian12
-  only:
-  - main
