@@ -11,7 +11,7 @@ google-api-core==2.29.0
     #   google-cloud (pyproject.toml)
     #   google-api-python-client
     #   google-cloud-pubsub
-google-api-python-client==2.187.0
+google-api-python-client==2.188.0
     # via google-cloud (pyproject.toml)
 google-auth==2.47.0
     # via
@@ -42,7 +42,7 @@ grpcio-status==1.76.0
     # via
     #   google-api-core
     #   google-cloud-pubsub
-httplib2==0.31.0
+httplib2==0.31.1
     # via
     #   google-api-python-client
     #   google-auth-httplib2
@@ -63,7 +63,7 @@ proto-plus==1.27.0
     # via
     #   google-api-core
     #   google-cloud-pubsub
-protobuf==6.33.2
+protobuf==6.33.4
     # via
     #   google-api-core
     #   google-cloud-pubsub
@@ -71,7 +71,7 @@ protobuf==6.33.2
     #   grpc-google-iam-v1
     #   grpcio-status
     #   proto-plus
-pyasn1==0.6.1
+pyasn1==0.6.2
     # via
     #   pyasn1-modules
     #   rsa
