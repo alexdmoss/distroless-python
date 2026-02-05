@@ -1,2 +1,2 @@
 # list CVEs here
-CVE-2025-4802       # reported May 2025, no fix yet
+CVE-2026-0861			# libc6 not fixed in upstream
