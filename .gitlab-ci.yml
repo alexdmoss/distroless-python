@@ -20,7 +20,7 @@ variables:
 
 .python-3.13-debian12:
   variables:
-    PYTHON_VERSION: "3.13.11"
+    PYTHON_VERSION: "3.13.12"
     OS_VERSION: debian12
     DEBIAN_NAME: bookworm
 
