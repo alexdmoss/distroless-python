@@ -6,7 +6,7 @@ FROM python:${PYTHON_VERSION}-slim-${DEBIAN_NAME} AS builder
 
 RUN pip --quiet --no-cache-dir install pipenv
 COPY Pipfile Pipfile.lock ./
-RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
+RUN PIPENV_VENV_IN_PROJECT=1 pipenv install
 
 # ------------------------------------------------------------------
 
