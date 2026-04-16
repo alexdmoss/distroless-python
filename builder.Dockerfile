@@ -31,9 +31,7 @@ RUN pip install --upgrade pip && \
     pip install --no-warn-script-location virtualenv poetry pipenv
 
 # ----------- install latest uv for use elsewhere as builder image ----------  #
-
 USER ${NONROOT_USER}
-
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.11.7-python3.13-trixie /usr/local/bin/uv /usr/local/bin/uvx /bin/
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 ENV UV_PYTHON_DOWNLOADS=0
