@@ -20,7 +20,7 @@ variables:
 
 .python-3.14-debian13:
   variables:
-    PYTHON_VERSION: "3.14.4"
+    PYTHON_VERSION: "3.14.5"
     OS_VERSION: debian13
     DEBIAN_NAME: trixie
 
