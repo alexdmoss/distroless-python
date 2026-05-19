@@ -10,3 +10,6 @@ dependencies = [
     "google-auth>=2.40.2",
     "google-cloud-pubsub>=2.29.0",
 ]
+
+[tool.uv]
+exclude-newer = "3 days"
