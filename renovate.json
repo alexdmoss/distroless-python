@@ -12,15 +12,21 @@
         "ARG PYTHON_VERSION=\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
       ],
       "depNameTemplate": "python",
-      "datasourceTemplate": "python-version",
-      "versioningTemplate": "pep440"
+      "packageNameTemplate": "python",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
     }
   ],
   "packageRules": [
     {
-      "matchDatasources": ["python-version"],
+      "matchDatasources": ["docker"],
       "matchPackageNames": ["python"],
       "separateMinorPatch": true
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "matchPackageNames": ["python"],
+      "enabled": false
     }
   ]
 }
