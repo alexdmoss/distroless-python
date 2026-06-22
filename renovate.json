@@ -19,14 +19,19 @@
   ],
   "packageRules": [
     {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["python"],
-      "separateMinorPatch": true
-    },
-    {
       "matchManagers": ["dockerfile"],
       "matchPackageNames": ["python"],
       "enabled": false
+    },
+    {
+      "matchPackageNames": ["python"],
+      "matchCurrentValue": "/^3\\.13\\./",
+      "allowedVersions": "/^3\\.13\\./"
+    },
+    {
+      "matchPackageNames": ["python"],
+      "matchCurrentValue": "/^3\\.14\\./",
+      "allowedVersions": "/^3\\.14\\./"
     }
   ]
 }
