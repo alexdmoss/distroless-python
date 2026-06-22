@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION="3.13.9"
+ARG PYTHON_VERSION="3.13.14"
 ARG DEBIAN_NAME="bookworm"
 
 # several optimisations in python-slim images already, benefit from these
