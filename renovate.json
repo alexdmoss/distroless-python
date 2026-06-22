@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)\\.gitlab-ci\\.yml$/",
+        "/(^|/)([^/]*\\.)?Dockerfile$/"
+      ],
+      "matchStrings": [
+        "PYTHON_VERSION:\\s*\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\"",
+        "ARG PYTHON_VERSION=\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+      ],
+      "depNameTemplate": "python",
+      "datasourceTemplate": "python-version",
+      "versioningTemplate": "pep440"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["python-version"],
+      "matchPackageNames": ["python"],
+      "separateMinorPatch": true
+    }
+  ]
+}
