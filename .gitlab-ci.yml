@@ -9,8 +9,12 @@ stages:
 
 # ---------------------- Variables ---------------------- #
 
+default:
+  tags:
+    - alexos-self-runner
+
 variables:
-  TRIVY_VERSION: "0.70.0"
+  TRIVY_VERSION: "0.72.0"
 
 .python-3.13-debian13:
   variables:
