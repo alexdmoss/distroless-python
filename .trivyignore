@@ -1,3 +1,4 @@
 # list CVEs here
-CVE-2026-14456			# not fixed in upstream
+CVE-2026-14456		# not fixed in upstream
 CVE-2025-47273          # not fixed in upstream
+GHSA-6v7p-g79w-8964     # not fixed in upstream
