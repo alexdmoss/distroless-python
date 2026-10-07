@@ -44,4 +44,6 @@ docker buildx build \
     -f distroless.Dockerfile . \
     --push
 
+print_image_versions "${PYTHON_DISTROLESS_IMAGE}${TAG}"
+
 popd > /dev/null || exit

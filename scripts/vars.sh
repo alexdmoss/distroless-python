@@ -68,6 +68,12 @@ if [[ -z ${CI_PIPELINE_ID:-} ]]; then
     CI_PIPELINE_ID=non-ci-$(git rev-parse --short HEAD)
 fi
 
+# distroless has no shell, so go via the python entrypoint to report what's actually in the image
+print_image_versions() {
+    echo "-> Versions in image: ${1}"
+    docker run --rm "${1}" -c "import platform; r = platform.freedesktop_os_release(); print(f\"   Python {platform.python_version()} | {r.get('VERSION', r['PRETTY_NAME'])} | debian_version {open('/etc/debian_version').read().strip()}\")"
+}
+
 export PYTHON_VERSION
 export PYTHON_MINOR
 export OS_VERSION

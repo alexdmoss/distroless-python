@@ -31,9 +31,9 @@ This repo was converted from an initial pipenv-based one to use poetry, as poetr
 
 Simple FastAPI app. As for the Flask/Gunicorn exampel above, note the use of `run.py` to deal with entrypoint. We cannot run `uvicorn` directly - a small wrapper script is used so that we can execute it through the normal `python` entrypoint. Its CLI syntax is a bit different to `gunicorn`.
 
-This example uses `pipenv` instead of `poetry` to show how that can be handled in a relatively straight-forward way.
+This example uses `uv` instead of `poetry` to show how that can be handled in a relatively straight-forward way - `uv sync` builds a virtual environment in the builder stage, which is then copied across.
 
-We are also using the `al3xos/python-builder` docker image as the base instead of `python:slim-bullseye` - in practice this just saves us needing to bother installing `pipenv` really.
+We are also using the `al3xos/python-builder` docker image as the base instead of `python:3.x-slim-<debian name>` - in practice this just saves us needing to bother installing `uv` really.
 
 ---
 
@@ -41,9 +41,9 @@ We are also using the `al3xos/python-builder` docker image as the base instead o
 
 `pandas` dependency on `numpy` forces changes in the base image that the distroless one is built from - so a good test. A choice here was to make the required changes in distroless itself, or layer it in just for this image. I chose the latter in this case to demonstrate how this can be done (and also because I use `pandas` rarely myself, tbh).
 
-This example does not bother with a virtual environment, and also uses a `requirements.txt` instead - just to prove that works fine. It can be a common practice to generate the requirements.txt file in CI for greater confidence in the build or easier portability.
+This example sticks to the standard library tooling - a plain `python -m venv` and `pip` with a `requirements.txt` - rather than a package manager, just to prove that works fine. It can be a common practice to generate the requirements.txt file in CI for greater confidence in the build or easier portability.
 
-The value of a virtual environment inside a container is debatable - but many of the other examples listed here use it for a consistency with local development processes.
+It previously skipped the virtual environment and used `pip install --user`, copying `~/.local` across. That was fragile: pip skips installing anything the builder image already has, so those packages were only available because the distroless image used to carry the builder's `site-packages` too. Now that the distroless image ships no `site-packages`, a self-contained virtual environment is the reliable way to copy dependencies across.
 
 ---
 
@@ -58,6 +58,8 @@ To minimise the dependency on / need to access a GCP project, we make use of the
 ## [Kubernetes](tests/kubernetes/)
 
 This one works the python kubernetes client libraries. I've included it as I personally use Python with k8s a lot, so knowing the image works for this important to me - although the test doesn't actually do much different to some of the ones above.
+
+This example uses `pipenv`, installed into a plain `python:3.x-slim-<debian name>` builder stage. `PIPENV_VENV_IN_PROJECT=1` makes pipenv create its virtual environment at a predictable path (`/.venv`) so it can be copied into the distroless image.
 
 In a similar vein to the Google Cloud one, we make use of [`kind`](https://kind.sigs.k8s.io/) to spin up a small local k8s cluster to connect to as a test, rather than relying on access to one locally (which is quite painful).
 

@@ -9,6 +9,10 @@ FROM ${PYTHON_BUILDER_IMAGE} AS python-base
 COPY lib_linker.sh /
 RUN /lib_linker.sh
 
+# python + stdlib only - drop builder tooling (pip/poetry/pipenv etc) from site-packages
+RUN cp -r /usr/local/lib /tmp/python-lib \
+    && rm -rf /tmp/python-lib/python3.*/site-packages/*
+
 ## ------------------------------- distroless base image ------------------------------ ##
 
 # build from distroless C or cc:debug, because lots of Python depends on C
@@ -20,7 +24,7 @@ ARG PYTHON_VERSION
 ## ------------------------- copy python itself from builder -------------------------- ##
 
 # this carries more risk than installing it fully, but makes the image a lot smaller
-COPY --from=python-base /usr/local/lib/ /usr/local/lib/
+COPY --chown=0:0 --from=python-base /tmp/python-lib/ /usr/local/lib/
 COPY --from=python-base /usr/local/bin/python /usr/local/bin/
 COPY --from=python-base /etc/ld.so.cache /etc/
 

@@ -24,13 +24,18 @@ A debug image also exists:
 docker run --rm -it --entrypoint=sh al3xos/python-distroless:3.13-debian13-debug
 ```
 
-There are variants for Python versions 3.13 and Python 3.14, based on Debian 13. They are built from the `python:3.x-slim-bookworm` image base.
+There are variants for Python versions 3.13 and Python 3.14, based on Debian 13. They are built from the `python:3.x-slim-<debian name>` image base (the Debian codename set as `DEBIAN_NAME` in [`.gitlab-ci.yml`](.gitlab-ci.yml)).
 
 Both `linux/amd64` and `linux/arm64` variants are pushed. Your docker environment should pull down the one that matches your platform (they are built using `docker buildx`)
 
+> [!WARNING]
+> **Change from Python `3.13.16` / `3.14.8` onwards:** the distroless image no longer ships the builder's tooling (`pip`, `poetry`, `pipenv`, `virtualenv` and their dependencies) in `site-packages` - it contains Python and its standard library only. This removes vulnerabilities in packages your app never uses (e.g. `urllib3` vendored inside `pip`) and cuts the image size by roughly two thirds.
+>
+> If you install dependencies into a virtualenv in a build stage and copy it across (as all the [`tests/`](tests/) examples do), nothing changes for you. If you instead relied on packages already present in the image - e.g. `pip install --user` in the builder and copying `~/.local` across, where pip skips anything the builder already had - you may now see `ImportError`s. Switch to a virtualenv (see [`tests/pandas/Dockerfile`](tests/pandas/Dockerfile) for a plain `python -m venv` + `pip` example), or pin to the previous patch tag (`3.13.15-debian13` / `3.14.7-debian13`) while you migrate - noting that pinned tags do not receive further security fixes.
+
 ### python/builder
 
-For convenience, the `builder` image used to create the above is also published. This is **not** in general going to be useful in running python apps, but can be a convenient way to get a top layer that is `python:3.13-slim-trixie` but with a non-root user and virtualenv/pipenv/poetry pre-installed - fewer stuff for you to sort in your Dockerfile! (Equivalent tags for 3.14 also exist).
+For convenience, the `builder` image used to create the above is also published. This is **not** in general going to be useful in running python apps, but can be a convenient way to get a top layer that is `python:3.x-slim-<debian name>` but with a non-root user and virtualenv/pipenv/poetry pre-installed - fewer stuff for you to sort in your Dockerfile! (Equivalent tags for 3.14 also exist).
 
 To use it:
 
