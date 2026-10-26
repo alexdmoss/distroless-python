@@ -3,7 +3,7 @@
 .build:
   image: al3xos/ci-tools:latest
   services:
-  - docker:dind
+  - docker:dind@sha256:9e79b879b177fbd72c34376a3dd3d91747da5db49e1f560f76aea59561471977
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2
@@ -21,7 +21,7 @@
 .test:
   image: al3xos/ci-tools:latest
   services:
-  - docker:dind
+  - docker:dind@sha256:9e79b879b177fbd72c34376a3dd3d91747da5db49e1f560f76aea59561471977
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_DRIVER: overlay2

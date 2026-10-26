@@ -32,6 +32,6 @@ RUN pip install --upgrade pip && \
 
 # ----------- install latest uv for use elsewhere as builder image ----------  #
 USER ${NONROOT_USER}
-COPY --from=ghcr.io/astral-sh/uv:0.11.7-python3.13-trixie /usr/local/bin/uv /usr/local/bin/uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.11.7-python3.13-trixie@sha256:929560df6a6231d0509739319bc214aaa1e78838ce1f779b1faeb877c23a50d8 /usr/local/bin/uv /usr/local/bin/uvx /bin/
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 ENV UV_PYTHON_DOWNLOADS=0
