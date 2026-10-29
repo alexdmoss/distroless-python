@@ -1,8 +1,8 @@
-ARG PYTHON_VERSION="3.13.14"
-ARG DEBIAN_NAME="bookworm"
+# python:<version>-slim-<debian name>@sha256:..., set in .gitlab-ci.yml
+ARG PYTHON_BASE_IMAGE
 
 # several optimisations in python-slim images already, benefit from these
-FROM python:${PYTHON_VERSION}-slim-${DEBIAN_NAME}
+FROM ${PYTHON_BASE_IMAGE}
 
 # ------------ setup standard non-root user for use downstream --------------  #
 
@@ -32,6 +32,6 @@ RUN pip install --upgrade pip && \
 
 # ----------- install latest uv for use elsewhere as builder image ----------  #
 USER ${NONROOT_USER}
-COPY --from=ghcr.io/astral-sh/uv:0.11.7-python3.13-trixie@sha256:929560df6a6231d0509739319bc214aaa1e78838ce1f779b1faeb877c23a50d8 /usr/local/bin/uv /usr/local/bin/uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.13.5-python3.13-trixie@sha256:11f0329b64916f56cfdf532194564aa993b959568f8806fe55b76503ef3c2c54 /usr/local/bin/uv /usr/local/bin/uvx /bin/
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 ENV UV_PYTHON_DOWNLOADS=0

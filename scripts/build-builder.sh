@@ -22,8 +22,7 @@ docker pull "${PYTHON_BUILDER_IMAGE}" || true
 
 docker buildx build \
     --platform linux/amd64,linux/arm64 \
-    --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
-    --build-arg DEBIAN_NAME="${DEBIAN_NAME}" \
+    --build-arg PYTHON_BASE_IMAGE="${PYTHON_BASE_IMAGE}" \
     -t "${PYTHON_BUILDER_IMAGE}${TAG}" \
     -t "${PYTHON_BUILDER_IMAGE_FULL}${TAG}" \
     -f builder.Dockerfile . \

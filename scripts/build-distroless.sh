@@ -36,7 +36,7 @@ docker buildx build \
 docker buildx build \
     --platform linux/amd64,linux/arm64 \
     --build-arg PYTHON_BUILDER_IMAGE="${PYTHON_BUILDER_IMAGE}" \
-    --build-arg GOOGLE_DISTROLESS_BASE_IMAGE="${GOOGLE_DISTROLESS_BASE_IMAGE}:debug" \
+    --build-arg GOOGLE_DISTROLESS_BASE_IMAGE="${GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE}" \
     --build-arg PYTHON_MINOR="${PYTHON_MINOR}" \
     --build-arg PYTHON_VERSION="${PYTHON_VERSION}" \
     -t "${PYTHON_DISTROLESS_IMAGE}-debug${TAG}" \

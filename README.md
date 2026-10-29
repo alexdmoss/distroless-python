@@ -24,7 +24,7 @@ A debug image also exists:
 docker run --rm -it --entrypoint=sh al3xos/python-distroless:3.13-debian13-debug
 ```
 
-There are variants for Python versions 3.13 and Python 3.14, based on Debian 13. They are built from the `python:3.x-slim-<debian name>` image base (the Debian codename set as `DEBIAN_NAME` in [`.gitlab-ci.yml`](.gitlab-ci.yml)).
+There are variants for Python versions 3.13 and Python 3.14, based on Debian 13. They are built from the `python:3.x-slim-<debian name>` image base (pinned by tag and digest as `PYTHON_BASE_IMAGE` in [`.gitlab-ci.yml`](.gitlab-ci.yml); Renovate bumps the digest whenever upstream rebuilds it).
 
 Both `linux/amd64` and `linux/arm64` variants are pushed. Your docker environment should pull down the one that matches your platform (they are built using `docker buildx`)
 
