@@ -1,6 +1,12 @@
 # python:<version>-slim-<debian name>@sha256:..., set in .gitlab-ci.yml
 ARG PYTHON_BASE_IMAGE
 
+# ghcr gives Renovate no release timestamps, so uv is tracked via its GitHub releases
+# renovate: datasource=github-releases depName=astral-sh/uv
+ARG UV_VERSION=0.13.5
+
+FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv
+
 # several optimisations in python-slim images already, benefit from these
 FROM ${PYTHON_BASE_IMAGE}
 
@@ -32,6 +38,6 @@ RUN pip install --upgrade pip && \
 
 # ----------- install latest uv for use elsewhere as builder image ----------  #
 USER ${NONROOT_USER}
-COPY --from=ghcr.io/astral-sh/uv:0.13.5-python3.13-trixie@sha256:11f0329b64916f56cfdf532194564aa993b959568f8806fe55b76503ef3c2c54 /usr/local/bin/uv /usr/local/bin/uvx /bin/
+COPY --from=uv /uv /uvx /bin/
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 ENV UV_PYTHON_DOWNLOADS=0
