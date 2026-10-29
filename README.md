@@ -8,6 +8,18 @@ Creates a distroless container image with up-to-date python installed
 
 No `latest` tag is offered. The intent is to be intentional (!) in your choice of version and when to upgrade.
 
+### Tags
+
+Each image (and its `-debug` variant, and the `python-builder` equivalents) is published under three tags:
+
+| Tag | Example | Meaning |
+|---|---|---|
+| `<minor>-<debian>` | `3.14-debian13` | Latest build of that Python minor. Moves on every rebuild, including Python patch releases and Debian security fixes |
+| `<version>-<debian>` | `3.14.8-debian13` | Latest build of that exact Python version. Moves when the base is rebuilt (Debian fixes) |
+| `<version>-<debian>-<pipeline>-<YYYY.MM.DD.hhmm>` | `3.14.8-debian13-3005468189-2026.10.29.1830` | One specific build (GitLab pipeline ID + its start time in UTC). **Never moves** |
+
+Debug variants put `-debug` straight after `<debian>`, e.g. `3.14.8-debian13-debug-3005468189-2026.10.29.1830`. Use the moving tags to keep receiving security fixes (ideally pinned by digest with something like Renovate bumping it), or a stamped tag if you need a build that will never change.
+
 Usage examples can be found in the [`tests/`](tests/) directory. These are also described in [EXAMPLES.md](EXAMPLES.md).
 
 ### python/distroless

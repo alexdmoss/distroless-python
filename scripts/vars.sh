@@ -85,6 +85,11 @@ if [[ -z ${CI_PIPELINE_ID:-} ]]; then
     CI_PIPELINE_ID=non-ci-$(git rev-parse --short HEAD)
 fi
 
+# Immutable tag suffix for main publishes. Taken from the pipeline's creation time
+# (UTC), so every image in a pipeline gets the same stamp and job retries reuse it
+PIPELINE_STAMP=$(date -u -d "${CI_PIPELINE_CREATED_AT:-now}" +%Y.%m.%d.%H%M)
+IMMUTABLE_TAG_SUFFIX="${CI_PIPELINE_ID}-${PIPELINE_STAMP}"
+
 # distroless has no shell, so go via the python entrypoint to report what's actually in the image
 print_image_versions() {
     echo "-> Versions in image: ${1}"
@@ -108,3 +113,4 @@ export GOOGLE_DISTROLESS_BASE_IMAGE
 export GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE
 export TEST_IMAGE_BASE
 export CI_PIPELINE_ID
+export IMMUTABLE_TAG_SUFFIX
