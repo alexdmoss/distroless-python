@@ -18,6 +18,12 @@
   ],
   "packageRules": [
     {
+      "description": "uv is tracked via its UV_VERSION ARG (github-releases). The dockerfile manager also resolves that ARG into FROM ghcr.io/astral-sh/uv:<ver> and would pin it by digest, breaking the version",
+      "matchManagers": ["dockerfile"],
+      "matchPackageNames": ["ghcr.io/astral-sh/uv"],
+      "enabled": false
+    },
+    {
       "description": "Test Dockerfiles build FROM python:${PYTHON_VERSION}-...; the version comes from PYTHON_BASE_IMAGE",
       "matchManagers": ["dockerfile"],
       "matchPackageNames": ["python"],
