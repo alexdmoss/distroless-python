@@ -1,32 +1,36 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>alexos-platform/renovate:automerge"],
   "constraints": {
     "python": "==3.13.*"
   },
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/(^|/)\\.gitlab-ci\\.yml$/",
-        "/(^|/)([^/]*\\.)?Dockerfile$/"
-      ],
+      "description": "Upstream bases as tag@digest: the preset's comment manager only tracks versions, which would miss same-tag rebuilds (Debian fixes)",
+      "managerFilePatterns": ["/(^|/)\\.gitlab-ci\\.yml$/"],
       "matchStrings": [
-        "PYTHON_VERSION:\\s*\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\"",
-        "ARG PYTHON_VERSION=\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+        "[A-Z_]+_BASE_IMAGE:\\s*\"(?<depName>[^:\"]+):(?<currentValue>[^@\"]+)@(?<currentDigest>sha256:[a-f0-9]+)\""
       ],
-      "depNameTemplate": "python",
-      "packageNameTemplate": "python",
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker"
     }
   ],
   "packageRules": [
     {
+      "description": "uv is tracked via its UV_VERSION ARG (github-releases). The dockerfile manager also resolves that ARG into FROM ghcr.io/astral-sh/uv:<ver> and would pin it by digest, breaking the version",
+      "matchManagers": ["dockerfile"],
+      "matchPackageNames": ["ghcr.io/astral-sh/uv"],
+      "enabled": false
+    },
+    {
+      "description": "Test Dockerfiles build FROM python:${PYTHON_VERSION}-...; the version comes from PYTHON_BASE_IMAGE",
       "matchManagers": ["dockerfile"],
       "matchPackageNames": ["python"],
       "enabled": false
     },
     {
+      "description": "Each Python variant stays on its own minor (the preset already disables python minors/majors; this keeps patch lookups per variant)",
       "matchPackageNames": ["python"],
       "matchCurrentValue": "/^3\\.13\\./",
       "allowedVersions": "/^3\\.13\\./"

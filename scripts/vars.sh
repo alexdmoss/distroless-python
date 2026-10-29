@@ -5,8 +5,19 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     exit 1
 fi
 
+# CI pins the upstream base as python:<version>-slim-<debian name>@sha256:...
+# Locally, PYTHON_VERSION + DEBIAN_NAME are enough (tag only, no digest)
+if [[ -n ${PYTHON_BASE_IMAGE:-} ]]; then
+    PYTHON_BASE_TAG=${PYTHON_BASE_IMAGE#python:}
+    PYTHON_BASE_TAG=${PYTHON_BASE_TAG%%@*}
+    PYTHON_VERSION=${PYTHON_BASE_TAG%%-*}
+    DEBIAN_NAME=${PYTHON_BASE_TAG##*-}
+elif [[ -n ${PYTHON_VERSION:-} && -n ${DEBIAN_NAME:-} ]]; then
+    PYTHON_BASE_IMAGE=python:${PYTHON_VERSION}-slim-${DEBIAN_NAME}
+fi
+
 if [[ -z ${PYTHON_VERSION:-} ]]; then
-    echo "-> [ERROR] PYTHON_VERSION not set - aborting"
+    echo "-> [ERROR] PYTHON_BASE_IMAGE (or PYTHON_VERSION + DEBIAN_NAME) not set - aborting"
     exit 1
 fi
 
@@ -32,7 +43,13 @@ elif [[ $(git name-rev --name-only HEAD) != "main" ]]; then
 fi
 
 # use the C (glibc) distroless - required by common packages like grpcio + numpy
-GOOGLE_DISTROLESS_BASE_IMAGE=gcr.io/distroless/cc-${OS_VERSION}
+# CI pins these as tag@digest; locally they float
+GOOGLE_DISTROLESS_BASE_IMAGE=${GOOGLE_DISTROLESS_BASE_IMAGE:-gcr.io/distroless/cc-${OS_VERSION}}
+GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE=${GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE:-gcr.io/distroless/cc-${OS_VERSION}:debug}
+if [[ ${GOOGLE_DISTROLESS_BASE_IMAGE} != *"-${OS_VERSION}"* || ${GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE} != *"-${OS_VERSION}"* ]]; then
+    echo "-> [ERROR] distroless base images don't match OS_VERSION ${OS_VERSION} - aborting"
+    exit 1
+fi
 # Cut patch version from semver Python version for streamlined image tags: 3.12.0 -> 3.12
 PYTHON_MINOR=$(echo $PYTHON_VERSION | sed -e "s#^\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)#\1.\2#")
 
@@ -68,13 +85,20 @@ if [[ -z ${CI_PIPELINE_ID:-} ]]; then
     CI_PIPELINE_ID=non-ci-$(git rev-parse --short HEAD)
 fi
 
+# Immutable tag suffix for main publishes. Taken from the pipeline's creation time
+# (UTC), so every image in a pipeline gets the same stamp and job retries reuse it
+PIPELINE_STAMP=$(date -u -d "${CI_PIPELINE_CREATED_AT:-now}" +%Y.%m.%d.%H%M)
+IMMUTABLE_TAG_SUFFIX="${CI_PIPELINE_ID}-${PIPELINE_STAMP}"
+
 # distroless has no shell, so go via the python entrypoint to report what's actually in the image
 print_image_versions() {
     echo "-> Versions in image: ${1}"
     docker run --rm "${1}" -c "import platform; r = platform.freedesktop_os_release(); print(f\"   Python {platform.python_version()} | {r.get('VERSION', r['PRETTY_NAME'])} | debian_version {open('/etc/debian_version').read().strip()}\")"
 }
 
+export PYTHON_BASE_IMAGE
 export PYTHON_VERSION
+export DEBIAN_NAME
 export PYTHON_MINOR
 export OS_VERSION
 export PYTHON_INTERMEDIATE_BUILDER_IMAGE
@@ -86,5 +110,7 @@ export PYTHON_FINAL_BUILDER_IMAGE_FULL
 export PYTHON_FINAL_DISTROLESS_IMAGE
 export PYTHON_FINAL_DISTROLESS_IMAGE_FULL
 export GOOGLE_DISTROLESS_BASE_IMAGE
+export GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE
 export TEST_IMAGE_BASE
 export CI_PIPELINE_ID
+export IMMUTABLE_TAG_SUFFIX
