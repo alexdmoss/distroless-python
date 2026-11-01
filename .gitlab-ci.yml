@@ -19,8 +19,8 @@ default:
 variables:
   # renovate: datasource=docker depName=aquasec/trivy
   TRIVY_VERSION: "0.76.1"
-  GOOGLE_DISTROLESS_BASE_IMAGE: "gcr.io/distroless/cc-debian13:latest@sha256:d74d144baa124dd9defd01d71872bb56c49d4441dba6153ccf790364f97e64b1"
-  GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE: "gcr.io/distroless/cc-debian13:debug@sha256:8eb229dfe1ec97410a495e312dfba214afd86bfc72010973e08796ac5e94e234"
+  GOOGLE_DISTROLESS_BASE_IMAGE: "gcr.io/distroless/cc-debian13:latest@sha256:58e12be899275afaa05f1b03051ab19037ed7f252528e57a3a9ad7e220a62578"
+  GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE: "gcr.io/distroless/cc-debian13:debug@sha256:ca230038e47b2c5da754b6a8f8a503f81bb54580e0897831814953f3d203e98b"
 
 .python-3.13-debian13:
   variables:
