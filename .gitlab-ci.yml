@@ -24,7 +24,7 @@ variables:
 
 .python-3.13-debian13:
   variables:
-    PYTHON_BASE_IMAGE: "python:3.13.18-slim-trixie@sha256:76baad6037690d6e8c4397fbcaef17bca6f19eecef822b708fe8fa3417d30bb5"
+    PYTHON_BASE_IMAGE: "python:3.13.18-slim-trixie@sha256:ae14d4ce8771606477a81446e7ef429edd6762305fc50c84507c1041fa8285d1"
     OS_VERSION: debian13
 
 .python-3.14-debian13:
