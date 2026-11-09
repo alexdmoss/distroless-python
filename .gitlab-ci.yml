@@ -18,18 +18,18 @@ default:
 # DEBIAN_NAME are read from the python tag in scripts/vars.sh
 variables:
   # renovate: datasource=docker depName=aquasec/trivy
-  TRIVY_VERSION: "0.76.1"
-  GOOGLE_DISTROLESS_BASE_IMAGE: "gcr.io/distroless/cc-debian13:latest@sha256:58e12be899275afaa05f1b03051ab19037ed7f252528e57a3a9ad7e220a62578"
-  GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE: "gcr.io/distroless/cc-debian13:debug@sha256:ca230038e47b2c5da754b6a8f8a503f81bb54580e0897831814953f3d203e98b"
+  TRIVY_VERSION: "0.76.2"
+  GOOGLE_DISTROLESS_BASE_IMAGE: "gcr.io/distroless/cc-debian13:latest@sha256:e1f5543d45a2cd7c02a5b43dda5f0ff30729b4832113759d01ed39b0b152cddb"
+  GOOGLE_DISTROLESS_DEBUG_BASE_IMAGE: "gcr.io/distroless/cc-debian13:debug@sha256:6ff40c52e5573b2b61fddb6a4b1ac6840ba4d2a19433893d4ca40702945adcad"
 
 .python-3.13-debian13:
   variables:
-    PYTHON_BASE_IMAGE: "python:3.13.18-slim-trixie@sha256:ae14d4ce8771606477a81446e7ef429edd6762305fc50c84507c1041fa8285d1"
+    PYTHON_BASE_IMAGE: "python:3.13.18-slim-trixie@sha256:e48f59cdba69a3cbd9ed2cf0f348d90d45a8d350d98134cf1070bc106ee9ed90"
     OS_VERSION: debian13
 
 .python-3.14-debian13:
   variables:
-    PYTHON_BASE_IMAGE: "python:3.14.10-slim-trixie@sha256:930e1abba7c4e8f96ed93e8012c35d174d7732752731bbd5e8e757d7ec6f3966"
+    PYTHON_BASE_IMAGE: "python:3.14.10-slim-trixie@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f"
     OS_VERSION: debian13
 
 # --------------------- Build Stages -------------------- #
