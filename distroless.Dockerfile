@@ -1,3 +1,4 @@
+# checkov:skip=CKV_DOCKER_7:PYTHON_BUILDER_IMAGE and GOOGLE_DISTROLESS_BASE_IMAGE come in as tag@digest build args from .gitlab-ci.yml, which checkov can't resolve
 ARG PYTHON_BUILDER_IMAGE
 ARG GOOGLE_DISTROLESS_BASE_IMAGE
 

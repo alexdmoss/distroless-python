@@ -1,3 +1,4 @@
+# checkov:skip=CKV_DOCKER_7:PYTHON_BASE_IMAGE comes in as a tag@digest build arg from .gitlab-ci.yml, which checkov can't resolve
 # python:<version>-slim-<debian name>@sha256:..., set in .gitlab-ci.yml
 ARG PYTHON_BASE_IMAGE
 
