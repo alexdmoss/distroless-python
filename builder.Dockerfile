@@ -4,7 +4,7 @@ ARG PYTHON_BASE_IMAGE
 
 # ghcr gives Renovate no release timestamps, so uv is tracked via its GitHub releases
 # renovate: datasource=github-releases depName=astral-sh/uv
-ARG UV_VERSION=0.13.7
+ARG UV_VERSION=0.13.8
 
 FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv
 
